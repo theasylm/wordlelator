@@ -2,10 +2,33 @@
   import { ref, onUnmounted } from 'vue'
   import Board from './components/Board.vue'
   import Keyboard from './components/Keyboard.vue'
-  const params = (new URL(document.location)).searchParams;
-  const word = params.get('word') || ''
+  import CryptoJS from 'crypto-js'
+  import JSURL from 'jsurl'
+  const encrypt = (text, useSalt) => {
+    if ( useSalt ){
+      let salt = Math.random().toString(36).slice(2, 6)
+      text = salt + '||' + text
+    }
+
+    return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(text))
+  }
+  const decrypt = (data, useSalt) => {
+    let word = CryptoJS.enc.Base64.parse(data).toString(CryptoJS.enc.Utf8)
+    if ( useSalt ){
+      return word.slice(word.indexOf('||') + 2)
+    } else {
+      return word
+    }
+
+  }
+  const params = JSURL.parse((new URL(document.location)).searchParams.get('p'))
+  const word = decrypt(params['w'],true) || ''
   const wordLength = word.length > 0 ? word.length : 5
-  const numberOfGuesses = parseInt(params.get('guesses')) || 6
+  const numberOfGuesses = parseInt(params['g']) || 6
+  const creator = params['c'] || ''
+  const hint1 = params['h1'] || ''
+  const hint2 = decrypt(params['h2'],false) || ''
+  const msg = decrypt(params['m'],false) || ''
   let guesses = ref(Array())
   for ( let i=0; i < numberOfGuesses; i++ ){
     let initialGuess = []
@@ -142,7 +165,7 @@
     window.removeEventListener('keyup', onKeyup)
   })
 
-  let onKey = function(key) {
+  const onKey = function(key) {
     if (/^[a-zA-Z]$/.test(key)) {
       fillTile(key.toLowerCase())
     } else if (key === 'Backspace') {
@@ -152,7 +175,7 @@
     }
   }
 
-  let fillTile = function(key){
+  const fillTile = function(key){
     for ( let i=0; i < guesses.value[currentGuess.value].length; i++ ){
       let tile = guesses.value[currentGuess.value][i]
       if ( tile['letter'] == '' ){
@@ -162,18 +185,17 @@
     }
   }
 
-  let clearTile = function() {
+  const clearTile = function() {
     for ( let i=guesses.value[currentGuess.value].length - 1; i > -1 ; i-- ){
       let tile = guesses.value[currentGuess.value][i]
       if ( tile['letter'] != '' ){
         tile['letter'] = ''
         break
       }
-
     }
   }
 
-  let completeRow = function() {
+  const completeRow = function() {
     let guess = guesses.value[currentGuess.value]
     let i = guess.length - 1
     if ( guess[i]['letter'] === '' ) {
@@ -223,7 +245,7 @@
     currentGuess.value++
   }
 
-  let updateKeyboard = function(letter,state) {
+  const updateKeyboard = function(letter,state) {
     let keyPosition = findKey(letter)
     console.log(keyPosition)
     if ( keyboardRows.value[keyPosition[0]][keyPosition[1]]['state'] < state ){
@@ -231,7 +253,7 @@
     }
   }
 
-  let findKey = function(letter) {
+  const findKey = function(letter) {
     for ( let i=0; i < 3; i++ ) {
       console.log(keyboardRows.value[i][0])
       for ( let x=0; x < keyboardRows.value[i].length; x++ ){
@@ -241,10 +263,18 @@
       }
     }
   }
+
+
 </script>
 
 <template>
   <h1>Wordlelator</h1>
+  <div class="info">
+    <span class="creator" v-if="creator != ''">Creator: {{creator}}</span><br/>
+    <span class="hint1" v-if="hint1 != ''">Hint: {{hint1}}</span><br/>
+    <span class="hint2" v-if="hint2 != ''">Hint2: {{hint2}}</span><br/>
+    <span class="msg" v-if="msg != ''">Message: {{msg}}</span><br/>
+  </div>
   <Board :guesses="guesses"></Board>
   <Keyboard :rows="keyboardRows"></Keyboard>
 </template>
@@ -263,6 +293,6 @@
   }
 
   h1 {
-    margin-top: 0;
+    margin: 0;
   }
 </style>
