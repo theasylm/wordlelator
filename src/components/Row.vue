@@ -1,13 +1,14 @@
 <script setup>
   import Tile from './Tile.vue'
   defineProps({
-    letters: Array
+    letters: Array,
+    keyboard: Boolean
   })
 </script>
 
 <template>
   <div class="row">
-    <Tile v-for="letter in letters" :letter="letter.letter" :state="letter.state"></Tile>
+    <Tile v-for="(letter, index) in letters" :letter="letter.letter" :state="letter.state" :keyboard="keyboard" :index="index"></Tile>
   </div>
 </template>
 

@@ -7,7 +7,7 @@
 
 <template>
   <div class="keyboard">
-    <Row :letters="row" v-for="row in rows"></Row>
+    <Row :letters="row" v-for="row in rows" :keyboard="true"></Row>
   </div>
 </template>
 
@@ -18,5 +18,8 @@
     left: 0;
     right: 0;
     margin: auto
+  }
+  .keyboard .tile {
+    cursor: pointer;
   }
 </style>
