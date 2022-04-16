@@ -298,13 +298,12 @@
     }
 
     currentGuess.value++
-    if (playerGuessCount.value < numberOfGuesses ){
-      if (!skipAnimation ){
+    if (!skipAnimation ){
+      if (playerGuessCount.value < numberOfGuesses ){
         playerGuessCount.value++
+      } else {
+        finished.value = true
       }
-    } else {
-      console.log('got here')
-      finished.value = true
     }
   }
 
@@ -328,8 +327,12 @@
   const genGameResults = function() {
     let emoji = ['','',':white_large_square:',':yellow_square:',':green_square:']
     let results = 'I ' + (correct.value ? 'solved ' : 'did not solve ') + ( creator ? creator + "'s" : 'this' ) + " Custom Wordle on the Wordlelator! " + (correct.value ? playerGuessCount.value : 'X' ) + '/' + numberOfGuesses + "\n"
-    for ( let i=0; i < playerGuessCount.value; i++ ){
+    for ( let i=0; i < guesses.value.length; i++ ){
       for ( let x=0; x < wordLength; x++ ) {
+        let result = emoji[guesses.value[i][x]['state']]
+        if ( result == '' ){
+          break;
+        }
         results += emoji[guesses.value[i][x]['state']]
       }
       results += "\n"
