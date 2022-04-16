@@ -30,14 +30,24 @@
   const hint2 = decrypt(params['h2'],false) || ''
   const msg = decrypt(params['m'],false) || ''
   let guesses = ref(Array())
+  let currentGuess = ref(0)
+  let givenWordCount = 0
   for ( let i=0; i < numberOfGuesses; i++ ){
+    let givenWord = params['s' + (i+1)]
+    if ( givenWord ) {
+      givenWordCount++
+    }
     let initialGuess = []
     for ( let x=0; x < wordLength; x++ ){
-      initialGuess.push({ 'letter': '', 'state': 0})
+      let letter = ''
+      if ( givenWord ) {
+        letter = givenWord.charAt(x)
+      }
+      initialGuess.push({ 'letter': letter, 'state': 0, 'initialized': givenWord ? true : false })
     }
     guesses.value.push(initialGuess)
   }
-  let currentGuess = ref(0)
+
   let keyboardRows = ref([
     [
       {
@@ -171,7 +181,7 @@
     } else if (key === 'Backspace') {
       clearTile()
     } else if (key === 'Enter') {
-      completeRow()
+      completeRow(false)
     }
   }
 
@@ -195,7 +205,8 @@
     }
   }
 
-  const completeRow = function() {
+  const completeRow = function(skipAnimation) {
+    let skip = skipAnimation ? 0 : 1
     let guess = guesses.value[currentGuess.value]
     let i = guess.length - 1
     if ( guess[i]['letter'] === '' ) {
@@ -212,7 +223,7 @@
         keyboardUpdates.push([guess[i]['letter'],4])
         setTimeout( () => {
           guess[i]['state'] = 4
-        }, 500 * (i+1))
+        }, 500 * (i+1) * skip)
       }
     }
 
@@ -223,7 +234,7 @@
         keyboardUpdates.push([guess[i]['letter'],3])
         setTimeout( () => {
           guess[i]['state'] = 3
-        }, 500 * (i+1))
+        }, 500 * (i+1) * skip)
       }
     }
 
@@ -232,7 +243,7 @@
         keyboardUpdates.push([guess[i]['letter'],2])
         setTimeout( () => {
           guess[i]['state'] = 2
-        }, 500 * (i+1))
+        }, 500 * (i+1) * skip)
       }
     }
 
@@ -240,14 +251,13 @@
       for ( let i=0; i < keyboardUpdates.length; i++ ) {
         updateKeyboard(keyboardUpdates[i][0],keyboardUpdates[i][1])
       }
-    }, 600 * guess.length)
+    }, 600 * guess.length * skip)
 
     currentGuess.value++
   }
 
   const updateKeyboard = function(letter,state) {
     let keyPosition = findKey(letter)
-    console.log(keyPosition)
     if ( keyboardRows.value[keyPosition[0]][keyPosition[1]]['state'] < state ){
       keyboardRows.value[keyPosition[0]][keyPosition[1]]['state'] = state
     }
@@ -255,7 +265,6 @@
 
   const findKey = function(letter) {
     for ( let i=0; i < 3; i++ ) {
-      console.log(keyboardRows.value[i][0])
       for ( let x=0; x < keyboardRows.value[i].length; x++ ){
         if ( letter === keyboardRows.value[i][x]['letter'] ) {
           return [i,x]
@@ -264,7 +273,9 @@
     }
   }
 
-
+  for ( let i=0; i < givenWordCount; i++ ){
+    completeRow(true)
+  }
 </script>
 
 <template>
@@ -274,7 +285,18 @@
     <span class="hint1" v-if="hint1 != ''">Hint: {{hint1}}</span><br/>
     <span class="hint2" v-if="hint2 != ''">Hint2: {{hint2}}</span><br/>
     <span class="msg" v-if="msg != ''">Message: {{msg}}</span><br/>
+    <span >guess: {{currentGuess}}</span><br/>
   </div>
+  <h3>{{JSURL.stringify({
+    'w': encrypt('testing',true),
+    'c': 'theasylm',
+    'g': 9,
+    'h1': 'short hint',
+    'h2': encrypt('very very long hint. oh so very long hint. this hint just goes on and on and on.',false),
+    'm': encrypt('Congrats!',false),
+    's1': 'attests',
+    's2': 'doggoes'
+  })}}</h3>
   <Board :guesses="guesses"></Board>
   <Keyboard :rows="keyboardRows"></Keyboard>
 </template>

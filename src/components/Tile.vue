@@ -16,7 +16,8 @@
      default: ''
     },
     index: Number,
-    keyboard: Boolean
+    keyboard: Boolean,
+    initialized: Boolean
   })
 
   let clickTile = function(){
@@ -33,7 +34,7 @@
 </script>
 
 <template>
-  <div class="tile" :class="[statusClasses[state],{ wide: letter.length > 1, revealed: state > 1 && !keyboard }]" @click="clickTile" :style="{ transitionDelay: `${keyboard ? 0 : index * 0}ms` }">{{letter}}</div>
+  <div class="tile" :class="[statusClasses[state],{ wide: letter.length > 1, revealed: state > 1 && !keyboard && !initialized }]" @click="clickTile">{{letter}}</div>
 </template>
 
 <style>
