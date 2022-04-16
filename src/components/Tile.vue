@@ -60,10 +60,12 @@
     background-color: #3a3a3c;
   }
   .not-in-place {
-    background-color: #e38f2f;
+    /**background-color: #e38f2f;**/
+    background-color: #b99a37;
   }
   .in-place {
-    background-color: #15a858;
+    /**background-color: #15a858;**/
+    background-color: #50834d;
   }
   .tile.wide {
     width: 7.5rem;

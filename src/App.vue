@@ -5,7 +5,7 @@
   import Keyboard from './components/Keyboard.vue'
   import CryptoJS from 'crypto-js'
   import JSURL from 'jsurl'
-  import { PencilIcon } from '@heroicons/vue/outline'
+  import { PencilIcon, QuestionMarkCircleIcon, LightBulbIcon, XIcon, ChartBarIcon } from '@heroicons/vue/outline'
   const encrypt = (text, useSalt) => {
     if ( useSalt ){
       let salt = Math.random().toString(36).slice(2, 6)
@@ -33,21 +33,31 @@
   if ( hint2 != '' ) {
     hint2 = decrypt(hint2,false)
   }
-  let msg = params['m'] || ''
-  if ( msg != '' ) {
-    msg = decrypt(msg,false)
+  let msg = ref('')
+  msg.value = params['m'] || ''
+  if ( msg.value != '' ) {
+    msg.value = decrypt(msg.value,false)
+  } else {
+    msg.value = 'Nice!'
   }
   let newWord = ref('')
   let newCreator = ref('')
   let newNumberOfGuesses = ref(6)
   let newHint1 = ref('')
   let newHint2 = ref('')
+  let newMessage = ref('')
   let newStartingWords = ref(Array())
   let newUrl = ref('')
   let showModal = ref(false)
+  let showHintModal = ref(false)
+  let showWinModal = ref(false)
   let guesses = ref(Array())
   let currentGuess = ref(0)
+  let playerGuessCount = ref(1)
   let givenWordCount = 0
+  let gameResults = ref('')
+  let finished = ref(false)
+  let correct = ref(false)
 
   for ( let key in params ) {
     let initialGuess = []
@@ -237,6 +247,8 @@
     }
 
     let answerLetters = word.split('')
+    let playerAnswer = guess.map((e) => e['letter']).join('')
+    correct.value = ( playerAnswer === word )
     let changedLetters = []
     let keyboardUpdates = []
     for ( let i=0; i < guess.length; i++ ) {
@@ -274,9 +286,26 @@
       for ( let i=0; i < keyboardUpdates.length; i++ ) {
         updateKeyboard(keyboardUpdates[i][0],keyboardUpdates[i][1])
       }
+      if ( correct.value || finished.value ) {
+        genGameResults()
+        showWinModal.value = true
+      }
     }, 600 * guess.length * skip)
 
+    if ( correct.value ) {
+      finished.value = true
+      return
+    }
+
     currentGuess.value++
+    if (playerGuessCount.value < numberOfGuesses ){
+      if (!skipAnimation ){
+        playerGuessCount.value++
+      }
+    } else {
+      console.log('got here')
+      finished.value = true
+    }
   }
 
   const updateKeyboard = function(letter,state) {
@@ -296,6 +325,22 @@
     }
   }
 
+  const genGameResults = function() {
+    let emoji = ['','',':white_large_square:',':yellow_square:',':green_square:']
+    let results = 'I ' + (correct.value ? 'solved ' : 'did not solve ') + ( creator ? creator + "'s" : 'this' ) + " Custom Wordle on the Wordlelator! " + (correct.value ? playerGuessCount.value : 'X' ) + '/' + numberOfGuesses + "\n"
+    for ( let i=0; i < playerGuessCount.value; i++ ){
+      for ( let x=0; x < wordLength; x++ ) {
+        results += emoji[guesses.value[i][x]['state']]
+      }
+      results += "\n"
+    }
+    results += document.location
+    gameResults.value = results
+    if (!correct.value){
+      msg.value = 'Too Bad!'
+    }
+  }
+
   for ( let i=0; i < givenWordCount; i++ ){
     completeRow(true)
   }
@@ -303,6 +348,16 @@
   const copy = function() {
     navigator.clipboard.writeText(newUrl.value)
     let span = document.getElementById('copiedMessage')
+    let classes = span.className
+    span.className += 'shown'
+    setTimeout(() => {
+      span.className = classes
+    }, 2000)
+  }
+
+  const copyResults = function() {
+    navigator.clipboard.writeText(gameResults.value)
+    let span = document.getElementById('copiedResultsMessage')
     let classes = span.className
     span.className += 'shown'
     setTimeout(() => {
@@ -330,9 +385,12 @@
     for ( let i=0; i < newStartingWords.value.length; i++ ) {
       if ( newStartingWords.value[i] != '' ){
         if ( newStartingWords.value[i].length == newWord.value.length ){
-          o['s' + count++] = newStartingWords.value[i]
+          o['s' + count++] = newStartingWords.value[i].toLowerCase()
         }
       }
+    }
+    if ( newMessage.value != '' ) {
+      o['m'] = encrypt(newMessage.value,false)
     }
     newUrl.value = 'http://localhost:3000/?p=' + JSURL.stringify(o)
   }
@@ -359,17 +417,18 @@
       <div class="col-md-4">
         <span class="title">Wordlelator</span>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-2 help">
+        <ChartBarIcon :class="{ inactive: !finished }" @click="showWinModal = (true && finished)"></ChartBarIcon>
+        <QuestionMarkCircleIcon></QuestionMarkCircleIcon>
+        <LightBulbIcon :class="{ inactive: hint2 == '' }" @click="showHintModal = (true && hint2 != '')"></LightBulbIcon>
       </div>
       <div class="col-md-2">
       </div>
     </div>
     <div class="info">
-      <span class="creator" v-if="creator != ''">Creator: {{creator}}</span><br/>
-      <span class="hint1" v-if="hint1 != ''">Hint: {{hint1}}</span><br/>
-      <span class="hint2" v-if="hint2 != ''">Hint2: {{hint2}}</span><br/>
-      <span class="msg" v-if="msg != ''">Message: {{msg}}</span><br/>
-      <span >guess: {{currentGuess}}</span><br/>
+      <span class="creator" v-if="creator != ''">Creator: {{creator}}</span>
+      <span class="hint1" v-if="hint1 != ''">Hint: {{hint1}}</span>
+      <span class="guess-counter">Guess: {{playerGuessCount}}/{{numberOfGuesses}}</span>
     </div>
     <Board :guesses="guesses"></Board>
     <Keyboard :rows="keyboardRows"></Keyboard>
@@ -383,9 +442,9 @@
         content-class="modal-content"
         :max-width="500"
       >
-        <button class="modal__close" @click="showModal = false">
-
-        </button>
+        <div class="close-modal-div">
+          <XIcon @click="showModal = false"></XIcon>
+        </div>
         <span class="modal__title">New Custom Wordle</span>
         <div class="modal__content">
           <div class="mb-3 row">
@@ -416,6 +475,12 @@
             <label for="hint2" class="col-sm-4 col-form-label">Hidden Hint</label>
             <div class="col-sm-8">
               <input type="text" class="form-control" id="hint2" v-model="newHint2"/>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="message" class="col-sm-4 col-form-label">Completion Message</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="message" v-model="newMessage"/>
             </div>
           </div>
           <div class="mb-3 row" v-for="(sw,index) in newStartingWords">
@@ -450,6 +515,45 @@
           </div>
         </div>
       </vue-final-modal>
+      <vue-final-modal
+        name="hintModal"
+        classes="modal-container"
+        :click-to-close="true"
+        :esc-to-close="true"
+        v-model="showHintModal"
+        content-class="modal-content"
+        :max-width="500"
+      >
+        <div class="close-modal-div">
+          <XIcon @click="showHintModal = false"></XIcon>
+        </div>
+        <span class="modal__title">Hint</span>
+        <div class="modal__content">
+          <div class="mb-3 row">
+            <div class="col-sm-12">
+              <span class="hint-span">{{hint2}}</span>
+            </div>
+          </div>
+        </div>
+      </vue-final-modal>
+      <vue-final-modal
+        name="winModal"
+        classes="modal-container"
+        :click-to-close="true"
+        :esc-to-close="true"
+        v-model="showWinModal"
+        content-class="modal-content"
+        :max-width="500"
+      >
+        <div class="close-modal-div">
+          <XIcon @click="showWinModal = false"></XIcon>
+        </div>
+        <span class="modal__title">{{msg}}</span>
+        <div class="modal__content">
+          <button class="btn btn-primary share-button" @click="copyResults">Share results</button><br/>
+          <span id="copiedResultsMessage">Copied!</span>
+        </div>
+      </vue-final-modal>
     </div>
   </div>
 </template>
@@ -474,21 +578,34 @@
   #url {
     width:  100%;
   }
-  #copiedMessage {
+  #copiedMessage, #copiedResultsMessage {
     visibility: hidden;
 
   }
-  #copiedMessage.shown {
+  #copiedMessage.shown, #copiedResultsMessage.shown {
     visibility: visible;
-
-  }
-
-  #copiedMessage.shown {
     opacity: 0;
     animation: fade 2s linear forwards;
   }
-
-
+  .share-button {
+    margin-top: 2rem;
+  }
+  .close-modal-div {
+    width: 36px;
+    position: absolute;
+    right: .5rem;
+    margin-top: -.5rem;
+    cursor: pointer;
+  }
+  .help svg {
+    width: 36px;
+    margin: 0 .25rem;
+    cursor: pointer;
+  }
+  .help svg.inactive {
+    opacity: 50%;
+    cursor:  default;
+  }
   @keyframes fade {
     0%,100% { opacity: 0 }
     50% { opacity: 1 }
@@ -500,6 +617,15 @@
   }
   .add-link:hover {
     color: #efefef;
+  }
+
+  .info {
+    display: flex;
+    justify-content: center;
+  }
+
+  .info span {
+    margin: 0 .5rem;
   }
 </style>
 <style scoped>
@@ -514,7 +640,9 @@
     border-radius: 0.25rem;
     background: #011637;
     width: 500px;
+    min-height: 10rem;
   }
+
   .modal__title {
     font-size: 1.5rem;
     font-weight: 700;
