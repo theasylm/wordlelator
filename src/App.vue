@@ -51,6 +51,7 @@
   let showModal = ref(false)
   let showHintModal = ref(false)
   let showWinModal = ref(false)
+  let showHelpModal = ref(false)
   let guesses = ref(Array())
   let currentGuess = ref(0)
   let playerGuessCount = ref(1)
@@ -422,7 +423,7 @@
       </div>
       <div class="col-md-2 help">
         <ChartBarIcon :class="{ inactive: !finished }" @click="showWinModal = (true && finished)"></ChartBarIcon>
-        <QuestionMarkCircleIcon></QuestionMarkCircleIcon>
+        <QuestionMarkCircleIcon @click="showHelpModal = true"></QuestionMarkCircleIcon>
         <LightBulbIcon :class="{ inactive: hint2 == '' }" @click="showHintModal = (true && hint2 != '')"></LightBulbIcon>
       </div>
       <div class="col-md-2">
@@ -557,6 +558,87 @@
           <span id="copiedResultsMessage">Copied!</span>
         </div>
       </vue-final-modal>
+      <vue-final-modal
+        name="helpModal"
+        classes="modal-container help-modal"
+        :click-to-close="true"
+        :esc-to-close="true"
+        v-model="showHelpModal"
+        content-class="modal-content"
+        :max-width="600"
+      >
+        <div class="close-modal-div">
+          <XIcon @click="showHelpModal = false"></XIcon>
+        </div>
+        <div class="modal__content">
+          <h2>How to Play</h2>
+          <div class="mb-3 row">
+            <div class="col-sm-12">
+              Guess the Wordle in the given number of tries. After each guess, the tiles will be colored to indicate how close to the target word your guess was.
+              <img src="./assets/green_clue.png"/>
+              Green indicates the N is in the correct spot.
+              <img src="./assets/yellow_clue.png"/>
+              Yellow indicates the U is in the word, but in another position.
+              <img src="./assets/grey_clue.png"/>
+              Grey indicates the P is not in the word.
+            </div>
+          </div>
+          <hr/>
+          <h2>How to Create</h2>
+          <div class="col-sm-12">
+            To create your own custom Wordle, hit the 'New Wordle' button. On the form presented, you can enter a number of different options. The only required entries are Word and Number of Guesses.
+            <table class="table">
+              <tr>
+                <td class="col-sm-3">Word</td>
+                <td class="col-sm-9">
+                  Set a word of any length, though the dictionary only handles lengths 3-10.<br/>
+                  Words are not required to be in the dictionary to be the secret word, allowing for proper nouns and loan words.
+                </td>
+              </tr>
+              <tr>
+                <td class="col-sm-3">Creator</td>
+                <td class="col-sm-9">Take pride in your puzzle by optionally adding your name.</td>
+              </tr>
+              <tr>
+                <td class="col-sm-3">Number of Guesses</td>
+                <td class="col-sm-9">This is the number of guesses the player has to guess your word, after any starting words you give them.</td>
+              </tr>
+              <tr>
+                <td class="col-sm-3">Short, Visible Hint</td>
+                <td class="col-sm-9">
+                  A short hint that will be displayed above the puzzle.<br/>
+                  Can be used to denote content-specific puzzles, for example.
+                </td>
+              </tr>
+              <tr>
+                <td class="col-sm-3">Hidden Hint</td>
+                <td class="col-sm-9">
+                  This is a hint that is hidden from the player initially.<br/>
+                  They can access it by pressing the light bulb icon.<br/>
+                  Good for definitions.
+                </td>
+              </tr>
+              <tr>
+                <td class="col-sm-3">Completion Message</td>
+                <td class="col-sm-9">Custom message to be displayed to a successful solver of your puzzle.</td>
+              </tr>
+              <tr>
+                <td class="col-sm-3">Starting Words</td>
+                <td class="col-sm-9">
+                  You can specify any number of starting words.<br/>
+                  These will be automatically applied and clued.<br/>
+                  Guess counts do NOT count the provided starting words as guesses.
+                </td>
+              </tr>
+            </table>
+            <div class="row">
+              <div class="col-sm-12">
+                Once you've filled in all the boxes you're interested in, hit the 'Generate URL' button to generate the URL that will take you to your puzzle. Also provided are buttons to automatically copy the URL, as well as visiting your puzzle, so you can check for errors.
+              </div>
+            </div>
+          </div>
+        </div>
+      </vue-final-modal>
     </div>
   </div>
 </template>
@@ -609,6 +691,9 @@
     opacity: 50%;
     cursor:  default;
   }
+  .help-modal img {
+    width: 100%;
+  }
   @keyframes fade {
     0%,100% { opacity: 0 }
     50% { opacity: 1 }
@@ -630,6 +715,11 @@
   .info span {
     margin: 0 .5rem;
   }
+  table.table {
+    color: #efefef;
+    border-top: 2px solid;
+    border-bottom: 2px solid;
+  }
 </style>
 <style scoped>
   ::v-deep .modal-content {
@@ -645,7 +735,13 @@
     width: 500px;
     min-height: 10rem;
   }
-
+  ::v-deep .help-modal .modal-content {
+    width:  650px;
+    text-align: left;
+  }
+  .help-modal ul {
+    list-style:  none;
+  }
   .modal__title {
     font-size: 1.5rem;
     font-weight: 700;
