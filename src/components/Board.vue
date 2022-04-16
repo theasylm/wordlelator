@@ -15,6 +15,7 @@
 <style>
   .board {
     height: calc(100vh - 19.5rem);
+   /**height: 10rem;**/
     overflow: scroll;
   }
 </style>

@@ -1,9 +1,11 @@
 <script setup>
+  import { $vfm, VueFinalModal, ModalsContainer } from 'vue-final-modal'
   import { ref, onUnmounted } from 'vue'
   import Board from './components/Board.vue'
   import Keyboard from './components/Keyboard.vue'
   import CryptoJS from 'crypto-js'
   import JSURL from 'jsurl'
+  import { PencilIcon } from '@heroicons/vue/outline'
   const encrypt = (text, useSalt) => {
     if ( useSalt ){
       let salt = Math.random().toString(36).slice(2, 6)
@@ -22,28 +24,46 @@
 
   }
   const params = JSURL.parse((new URL(document.location)).searchParams.get('p'))
-  const word = decrypt(params['w'],true) || ''
+  const word = decrypt(params['w'],true)
   const wordLength = word.length > 0 ? word.length : 5
   const numberOfGuesses = parseInt(params['g']) || 6
   const creator = params['c'] || ''
   const hint1 = params['h1'] || ''
-  const hint2 = decrypt(params['h2'],false) || ''
-  const msg = decrypt(params['m'],false) || ''
+  let hint2 = params['h2'] || ''
+  if ( hint2 != '' ) {
+    hint2 = decrypt(hint2,false)
+  }
+  let msg = params['m'] || ''
+  if ( msg != '' ) {
+    msg = decrypt(msg,false)
+  }
+  let newWord = ref('')
+  let newCreator = ref('')
+  let newNumberOfGuesses = ref(6)
+  let newHint1 = ref('')
+  let newHint2 = ref('')
+  let newStartingWords = ref(Array())
+  let newUrl = ref('')
+  let showModal = ref(false)
   let guesses = ref(Array())
   let currentGuess = ref(0)
   let givenWordCount = 0
-  for ( let i=0; i < numberOfGuesses; i++ ){
-    let givenWord = params['s' + (i+1)]
-    if ( givenWord ) {
-      givenWordCount++
-    }
+
+  for ( let key in params ) {
     let initialGuess = []
-    for ( let x=0; x < wordLength; x++ ){
-      let letter = ''
-      if ( givenWord ) {
-        letter = givenWord.charAt(x)
+    if ( key.startsWith('s') ) {
+      givenWordCount++
+      for ( let i=0; i < wordLength; i++ ) {
+        initialGuess.push({ 'letter': params[key].charAt(i), 'state': 0, 'initialized': true })
       }
-      initialGuess.push({ 'letter': letter, 'state': 0, 'initialized': givenWord ? true : false })
+      guesses.value.push(initialGuess)
+    }
+  }
+
+  for ( let i=0; i < numberOfGuesses; i++ ){
+    let initialGuess = []
+    for ( let i=0; i < wordLength; i++ ) {
+      initialGuess.push({ 'letter': '', 'state': 0, 'initialized': false })
     }
     guesses.value.push(initialGuess)
   }
@@ -176,6 +196,9 @@
   })
 
   const onKey = function(key) {
+    if (showModal.value) {
+      return
+    }
     if (/^[a-zA-Z]$/.test(key)) {
       fillTile(key.toLowerCase())
     } else if (key === 'Backspace') {
@@ -276,29 +299,159 @@
   for ( let i=0; i < givenWordCount; i++ ){
     completeRow(true)
   }
+
+  const copy = function() {
+    navigator.clipboard.writeText(newUrl.value)
+    let span = document.getElementById('copiedMessage')
+    let classes = span.className
+    span.className += 'shown'
+    setTimeout(() => {
+      span.className = classes
+    }, 2000)
+  }
+
+  const generateUrl = function() {
+    let o = {}
+    if ( newWord.value == '' || newNumberOfGuesses.value == '' ) {
+      return
+    }
+    o['w'] = encrypt(newWord.value.toLowerCase(),true)
+    if ( newCreator.value != '' ) {
+      o['c'] = newCreator.value
+    }
+    o['g'] = newNumberOfGuesses.value
+    if ( newHint1.value != '' ){
+      o['h1'] = newHint1.value
+    }
+    if ( newHint2.value != '' ){
+      o['h2'] = encrypt(newHint2.value,false)
+    }
+    let count = 1
+    for ( let i=0; i < newStartingWords.value.length; i++ ) {
+      if ( newStartingWords.value[i] != '' ){
+        if ( newStartingWords.value[i].length == newWord.value.length ){
+          o['s' + count++] = newStartingWords.value[i]
+        }
+      }
+    }
+    newUrl.value = 'http://localhost:3000/?p=' + JSURL.stringify(o)
+  }
+  let addNewStartingWord = function() {
+    newStartingWords.value.push('')
+  }
+  let gotoUrl = function() {
+    if ( newUrl.value == '' ) {
+      return
+    }
+    document.location = newUrl.value
+  }
 </script>
 
 <template>
-  <h1>Wordlelator</h1>
-  <div class="info">
-    <span class="creator" v-if="creator != ''">Creator: {{creator}}</span><br/>
-    <span class="hint1" v-if="hint1 != ''">Hint: {{hint1}}</span><br/>
-    <span class="hint2" v-if="hint2 != ''">Hint2: {{hint2}}</span><br/>
-    <span class="msg" v-if="msg != ''">Message: {{msg}}</span><br/>
-    <span >guess: {{currentGuess}}</span><br/>
+  <div class="container">
+    <div class="header row">
+      <div class="col-md-2"></div>
+      <div class="col-md-2">
+        <button @click="showModal = true" class="new-button btn btn-primary">
+          <PencilIcon></PencilIcon>New Wordle
+        </button>
+      </div>
+      <div class="col-md-4">
+        <span class="title">Wordlelator</span>
+      </div>
+      <div class="col-md-2">
+      </div>
+      <div class="col-md-2">
+      </div>
+    </div>
+    <div class="info">
+      <span class="creator" v-if="creator != ''">Creator: {{creator}}</span><br/>
+      <span class="hint1" v-if="hint1 != ''">Hint: {{hint1}}</span><br/>
+      <span class="hint2" v-if="hint2 != ''">Hint2: {{hint2}}</span><br/>
+      <span class="msg" v-if="msg != ''">Message: {{msg}}</span><br/>
+      <span >guess: {{currentGuess}}</span><br/>
+    </div>
+    <Board :guesses="guesses"></Board>
+    <Keyboard :rows="keyboardRows"></Keyboard>
+    <div>
+      <vue-final-modal
+        name="newWordle"
+        classes="modal-container"
+        :click-to-close="true"
+        :esc-to-close="true"
+        v-model="showModal"
+        content-class="modal-content"
+        :max-width="500"
+      >
+        <button class="modal__close" @click="showModal = false">
+
+        </button>
+        <span class="modal__title">New Custom Wordle</span>
+        <div class="modal__content">
+          <div class="mb-3 row">
+            <label for="word" class="col-sm-4 col-form-label">Word</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="word" v-model="newWord"/>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="creator" class="col-sm-4 col-form-label">Creator</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="creator" v-model="newCreator"/>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="guesses" class="col-sm-4 col-form-label">Number of Guesses</label>
+            <div class="col-sm-8">
+              <input type="number" class="form-control" id="guesses" v-model="newNumberOfGuesses"/>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="hint1" class="col-sm-4 col-form-label">Short, Visible Hint</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="hint1" v-model="newHint1"/>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="hint2" class="col-sm-4 col-form-label">Hidden Hint</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="hint2" v-model="newHint2"/>
+            </div>
+          </div>
+          <div class="mb-3 row" v-for="(sw,index) in newStartingWords">
+            <label :for="'s' + index" class="col-sm-4 col-form-label">Starting Word</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" :id="'s' + index" v-model="newStartingWords[index]"/>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <div class="col-sm-12">
+              <a class="add-link" @click="addNewStartingWord">Add Starting Word</a>
+            </div>
+          </div>
+        </div>
+        <div class="modal__action">
+          <div class="mb-3 row">
+            <div class="col-sm-12">
+              <textarea id="url" onclick="this.focus();this.select()" readonly="readonly" v-model="newUrl"></textarea>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <div class="col-sm-4">
+              <button @click="gotoUrl">Go to Puzzle</button>
+            </div>
+            <div class="col-sm-4">
+              <button @click="copy">Copy URL</button>
+              <span id="copiedMessage">Copied!</span>
+            </div>
+            <div class="col-sm-4">
+              <button @click="generateUrl">Generate URL</button>
+            </div>
+          </div>
+        </div>
+      </vue-final-modal>
+    </div>
   </div>
-  <h3>{{JSURL.stringify({
-    'w': encrypt('testing',true),
-    'c': 'theasylm',
-    'g': 9,
-    'h1': 'short hint',
-    'h2': encrypt('very very long hint. oh so very long hint. this hint just goes on and on and on.',false),
-    'm': encrypt('Congrats!',false),
-    's1': 'attests',
-    's2': 'doggoes'
-  })}}</h3>
-  <Board :guesses="guesses"></Board>
-  <Keyboard :rows="keyboardRows"></Keyboard>
 </template>
 
 <style>
@@ -313,8 +466,82 @@
     height: 100vh;
     padding-top: 1em;
   }
+  .header {
+  }
+  .title {
+    font-size: 2em;
+  }
+  #url {
+    width:  100%;
+  }
+  #copiedMessage {
+    visibility: hidden;
 
-  h1 {
-    margin: 0;
+  }
+  #copiedMessage.shown {
+    visibility: visible;
+
+  }
+
+  #copiedMessage.shown {
+    opacity: 0;
+    animation: fade 2s linear forwards;
+  }
+
+
+  @keyframes fade {
+    0%,100% { opacity: 0 }
+    50% { opacity: 1 }
+  }
+  .add-link {
+    cursor:  pointer;
+    color: #efefef;
+    text-decoration: none;
+  }
+  .add-link:hover {
+    color: #efefef;
+  }
+</style>
+<style scoped>
+  ::v-deep .modal-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-height: 90%;
+    margin: 0 1rem;
+    padding: 1rem;
+    border: 1px solid #efefef;
+    border-radius: 0.25rem;
+    background: #011637;
+    width: 500px;
+  }
+  .modal__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  ::v-deep .modal-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+.modal__content {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+  .modal__close {
+    position: absolute;
+    top: 0.5rem;
+    right: 1.5rem;
+  }
+  .modal__action {
+    padding: 1rem 0 0;
+  }
+  .new-button {
+    width: 10rem;
+  }
+  .new-button svg {
+    float: right;
+    width: 24px;
   }
 </style>

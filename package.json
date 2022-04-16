@@ -8,10 +8,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/vue": "^1.0.6",
+    "@vuetify/vite-plugin": "^1.0.0-alpha.10",
     "crypto-js": "^4.1.1",
+    "floating-vue": "^2.0.0-beta.15",
     "jsurl": "^0.1.5",
     "lz-string": "^1.4.4",
-    "vue": "^3.2.25"
+    "vue": "^3.2.25",
+    "vue-final-modal": "^3.4.3"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.1",
