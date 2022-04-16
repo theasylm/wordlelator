@@ -412,21 +412,18 @@
 <template>
   <div class="container">
     <div class="header row">
-      <div class="col-md-2"></div>
-      <div class="col-md-2">
+      <div class="col-md-3">
         <button @click="showModal = true" class="new-button btn btn-primary">
           <PencilIcon></PencilIcon>New Wordle
         </button>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-6">
         <span class="title">Wordlelator</span>
       </div>
-      <div class="col-md-2 help">
+      <div class="col-md-3 help">
         <ChartBarIcon :class="{ inactive: !finished }" @click="showWinModal = (true && finished)"></ChartBarIcon>
         <QuestionMarkCircleIcon @click="showHelpModal = true"></QuestionMarkCircleIcon>
         <LightBulbIcon :class="{ inactive: hint2 == '' }" @click="showHintModal = (true && hint2 != '')"></LightBulbIcon>
-      </div>
-      <div class="col-md-2">
       </div>
     </div>
     <div class="info">
@@ -439,7 +436,7 @@
     <div>
       <vue-final-modal
         name="newWordle"
-        classes="modal-container"
+        classes="modal-container newModal"
         :click-to-close="true"
         :esc-to-close="true"
         v-model="showModal"
@@ -507,14 +504,14 @@
           </div>
           <div class="mb-3 row">
             <div class="col-sm-4">
-              <button @click="gotoUrl">Go to Puzzle</button>
+              <button @click="gotoUrl" class="btn btn-primary">Go to Puzzle</button>
             </div>
             <div class="col-sm-4">
-              <button @click="copy">Copy URL</button>
+              <button @click="copy" class="btn btn-primary">Copy URL</button><br/>
               <span id="copiedMessage">Copied!</span>
             </div>
             <div class="col-sm-4">
-              <button @click="generateUrl">Generate URL</button>
+              <button @click="generateUrl" class="btn btn-primary">Generate URL</button>
             </div>
           </div>
         </div>
@@ -581,60 +578,60 @@
               Yellow indicates the U is in the word, but in another position.
               <img src="./assets/grey_clue.png"/>
               Grey indicates the P is not in the word.
+              <hr/>
             </div>
           </div>
-          <hr/>
           <h2>How to Create</h2>
-          <div class="col-sm-12">
-            To create your own custom Wordle, hit the 'New Wordle' button. On the form presented, you can enter a number of different options. The only required entries are Word and Number of Guesses.
-            <table class="table">
-              <tr>
-                <td class="col-sm-3">Word</td>
-                <td class="col-sm-9">
-                  Set a word of any length, though the dictionary only handles lengths 3-10.<br/>
-                  Words are not required to be in the dictionary to be the secret word, allowing for proper nouns and loan words.
-                </td>
-              </tr>
-              <tr>
-                <td class="col-sm-3">Creator</td>
-                <td class="col-sm-9">Take pride in your puzzle by optionally adding your name.</td>
-              </tr>
-              <tr>
-                <td class="col-sm-3">Number of Guesses</td>
-                <td class="col-sm-9">This is the number of guesses the player has to guess your word, after any starting words you give them.</td>
-              </tr>
-              <tr>
-                <td class="col-sm-3">Short, Visible Hint</td>
-                <td class="col-sm-9">
-                  A short hint that will be displayed above the puzzle.<br/>
-                  Can be used to denote content-specific puzzles, for example.
-                </td>
-              </tr>
-              <tr>
-                <td class="col-sm-3">Hidden Hint</td>
-                <td class="col-sm-9">
-                  This is a hint that is hidden from the player initially.<br/>
-                  They can access it by pressing the light bulb icon.<br/>
-                  Good for definitions.
-                </td>
-              </tr>
-              <tr>
-                <td class="col-sm-3">Completion Message</td>
-                <td class="col-sm-9">Custom message to be displayed to a successful solver of your puzzle.</td>
-              </tr>
-              <tr>
-                <td class="col-sm-3">Starting Words</td>
-                <td class="col-sm-9">
-                  You can specify any number of starting words.<br/>
-                  These will be automatically applied and clued.<br/>
-                  Guess counts do NOT count the provided starting words as guesses.
-                </td>
-              </tr>
-            </table>
-            <div class="row">
-              <div class="col-sm-12">
-                Once you've filled in all the boxes you're interested in, hit the 'Generate URL' button to generate the URL that will take you to your puzzle. Also provided are buttons to automatically copy the URL, as well as visiting your puzzle, so you can check for errors.
-              </div>
+          <div class="row">
+            <div class="col-sm-12">
+              To create your own custom Wordle, hit the 'New Wordle' button. On the form presented, you can enter a number of different options. The only required entries are Word and Number of Guesses.
+              <table class="table">
+                <tr>
+                  <td class="col-sm-3">Word</td>
+                  <td class="col-sm-9">
+                    Set a word of any length, though the dictionary only handles lengths 3-10.<br/>
+                    Words are not required to be in the dictionary to be the secret word, allowing for proper nouns and loan words.
+                  </td>
+                </tr>
+                <tr>
+                  <td class="col-sm-3">Creator</td>
+                  <td class="col-sm-9">Take pride in your puzzle by optionally adding your name.</td>
+                </tr>
+                <tr>
+                  <td class="col-sm-3">Number of Guesses</td>
+                  <td class="col-sm-9">This is the number of guesses the player has to guess your word, after any starting words you give them.</td>
+                </tr>
+                <tr>
+                  <td class="col-sm-3">Short, Visible Hint</td>
+                  <td class="col-sm-9">
+                    A short hint that will be displayed above the puzzle.<br/>
+                    Can be used to denote content-specific puzzles, for example.
+                  </td>
+                </tr>
+                <tr>
+                  <td class="col-sm-3">Hidden Hint</td>
+                  <td class="col-sm-9">
+                    This is a hint that is hidden from the player initially.<br/>
+                    They can access it by pressing the light bulb icon.<br/>
+                    Good for definitions.
+                  </td>
+                </tr>
+                <tr>
+                  <td class="col-sm-3">Completion Message</td>
+                  <td class="col-sm-9">Custom message to be displayed to a successful solver of your puzzle.</td>
+                </tr>
+                <tr>
+                  <td class="col-sm-3">Starting Words</td>
+                  <td class="col-sm-9">
+                    You can specify any number of starting words.<br/>
+                    These will be automatically applied and clued.<br/>
+                    Guess counts do NOT count the provided starting words as guesses.
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="col-sm-12">
+              Once you've filled in all the boxes you're interested in, hit the 'Generate URL' button to generate the URL that will take you to your puzzle. Also provided are buttons to automatically copy the URL, as well as visiting your puzzle, so you can check for errors.
             </div>
           </div>
         </div>
@@ -694,6 +691,16 @@
   .help-modal img {
     width: 100%;
   }
+  .help-modal h2 {
+    text-align: center;
+  }
+  .help-modal hr {
+    height: 2px;
+    background-color: #efefef;
+    border: none;
+    opacity: 1;
+  }
+
   @keyframes fade {
     0%,100% { opacity: 0 }
     50% { opacity: 1 }
@@ -752,10 +759,10 @@
     align-items: center;
   }
 
-.modal__content {
-  flex-grow: 1;
-  overflow-y: auto;
-}
+  .modal__content {
+    flex-grow: 1;
+    overflow-y: auto;
+  }
   .modal__close {
     position: absolute;
     top: 0.5rem;
@@ -770,5 +777,10 @@
   .new-button svg {
     float: right;
     width: 24px;
+  }
+  @media (max-width: 786px){
+    .newModal .btn {
+      margin: .5rem 0;
+    }
   }
 </style>
