@@ -554,15 +554,15 @@
             </div>
           </div>
           <div class="mb-3 row">
-            <label for="creator" class="col-sm-4 col-form-label">Creator</label>
-            <div class="col-sm-8">
-              <input type="text" class="form-control" id="creator" v-model="newCreator"/>
-            </div>
-          </div>
-          <div class="mb-3 row">
             <label for="guesses" class="col-sm-4 col-form-label">Number of Guesses</label>
             <div class="col-sm-8">
               <input type="number" class="form-control" id="guesses" v-model="newNumberOfGuesses"  :class="{'has-error': newNumberOfGuessesInvalid }"/>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="creator" class="col-sm-4 col-form-label">Creator</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="creator" v-model="newCreator"/>
             </div>
           </div>
           <div class="mb-3 row">
@@ -858,7 +858,7 @@
   }
   .has-error {
     border-color: #842029 !important;
-    border-width: 3px;
+    border-width: 4px;
   }
 </style>
 <style scoped>
