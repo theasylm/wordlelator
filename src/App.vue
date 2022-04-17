@@ -435,7 +435,7 @@
   let newStartingWordsInvalid = computed(() => {
     let results = []
     for ( let i=0; i < newStartingWords.value.length; i++){
-      results.push( newStartingWords.value[i].length != newWord.value.length )
+      results.push( newStartingWords.value[i].length != newWord.value.length && newStartingWords.value[i].length != 0 )
     }
     return results
   })
@@ -483,7 +483,9 @@
 
     let count = 1
     for ( let i=0; i < newStartingWords.value.length; i++ ) {
-      o['s' + count++] = newStartingWords.value[i].toLowerCase()
+      if ( newStartingWords.value[i].length > 0 ) {
+        o['s' + count++] = newStartingWords.value[i].toLowerCase()
+      }
     }
 
     if ( newMessage.value != '' ) {
