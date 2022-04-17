@@ -17,7 +17,8 @@
     },
     index: Number,
     keyboard: Boolean,
-    initialized: Boolean
+    initialized: Boolean,
+    colored: Boolean
   })
 
   let clickTile = function(){
@@ -34,7 +35,7 @@
 </script>
 
 <template>
-  <div class="tile" :class="[statusClasses[state],{ wide: letter.length > 1, revealed: state > 1 && !keyboard && !initialized }]" @click="clickTile">
+  <div class="tile" :class="[statusClasses[state],{ wide: letter.length > 1, revealed: state > 1 && !keyboard && !initialized, colored: colored }]" @click="clickTile">
     <div class="letter">{{letter}}</div>
   </div>
 </template>
@@ -52,20 +53,20 @@
     align-items: center;
     font-size: 2rem;
     font-weight: 600;
-    transition: transform .5s;
+    transition: transform 1.4s;
 
   }
-  .unguessed {
+  .unguessed.colored {
     background-color: #818384;
   }
-  .not-in-word {
+  .not-in-word.colored {
     background-color: #3a3a3c;
   }
-  .not-in-place {
+  .not-in-place.colored {
     /**background-color: #e38f2f;**/
     background-color: #b99a37;
   }
-  .in-place {
+  .in-place.colored {
     /**background-color: #15a858;**/
     background-color: #50834d;
   }
@@ -77,6 +78,6 @@
   }
   .tile.revealed .letter {
     transform: rotateX(180deg);
-    transition: transform .5s;
+    transition: transform 1.4s;
   }
 </style>

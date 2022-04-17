@@ -8,7 +8,7 @@
 
 <template>
   <div class="row">
-    <Tile v-for="(letter, index) in letters" :letter="letter.letter" :state="letter.state" :keyboard="keyboard" :index="index" :initialized="letter.initialized"></Tile>
+    <Tile v-for="(letter, index) in letters" :letter="letter.letter" :state="letter.state" :keyboard="keyboard" :index="index" :initialized="letter.initialized" :colored="letter.colored"></Tile>
   </div>
 </template>
 

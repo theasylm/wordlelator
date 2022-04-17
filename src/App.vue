@@ -80,7 +80,7 @@
     if ( key.startsWith('s') ) {
       givenWordCount++
       for ( let i=0; i < wordLength; i++ ) {
-        initialGuess.push({ 'letter': params[key].charAt(i), 'state': 0, 'initialized': true })
+        initialGuess.push({ 'letter': params[key].charAt(i), 'state': 0, 'initialized': true, 'colored': true })
       }
       guesses.value.push(initialGuess)
     }
@@ -89,7 +89,7 @@
   const addEmptyRow = function() {
     let initialGuess = []
     for ( let i=0; i < wordLength; i++ ) {
-      initialGuess.push({ 'letter': '', 'state': 0, 'initialized': false })
+      initialGuess.push({ 'letter': '', 'state': 0, 'initialized': false, 'colored': false })
     }
     guesses.value.push(initialGuess)
   }
@@ -106,119 +106,147 @@
     [
       {
         'letter': 'q',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'w',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'e',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'r',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 't',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'y',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'u',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'i',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'o',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'p',
-        'state': 1
+        'state': 1,
+        'colored': true
       }
     ],
     [
       {
         'letter': 'a',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 's',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'd',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'f',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'g',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'h',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'j',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'k',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'l',
-        'state': 1
+        'state': 1,
+        'colored': true
       }
     ],
     [
       {
         'letter': 'enter',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'z',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'x',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'c',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'v',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'b',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'n',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'm',
-        'state': 1
+        'state': 1,
+        'colored': true
       },
       {
         'letter': 'del',
-        'state': 1
+        'state': 1,
+        'colored': true
       }
     ]
   ])
@@ -287,7 +315,10 @@
         keyboardUpdates.push([guess[i]['letter'],4])
         setTimeout( () => {
           guess[i]['state'] = 4
-        }, 400 * (i+1) * skip)
+        }, 150 * (i) * skip)
+        setTimeout( () => {
+          guess[i]['colored'] = true
+        }, (450 + 150 * (i)) * skip)
       }
     }
 
@@ -298,7 +329,10 @@
         keyboardUpdates.push([guess[i]['letter'],3])
         setTimeout( () => {
           guess[i]['state'] = 3
-        }, 400 * (i+1) * skip)
+        }, 150 * (i) * skip)
+        setTimeout( () => {
+          guess[i]['colored'] = true
+        }, (450 + 150 * (i)) * skip)
       }
     }
 
@@ -307,7 +341,10 @@
         keyboardUpdates.push([guess[i]['letter'],2])
         setTimeout( () => {
           guess[i]['state'] = 2
-        }, 400 * (i+1) * skip)
+        }, 150 * (i) * skip)
+        setTimeout( () => {
+          guess[i]['colored'] = true
+        }, (450 + 150 * (i)) * skip)
       }
     }
 
@@ -319,7 +356,7 @@
         genGameResults()
         showWinModal.value = true
       }
-    }, 450 * guess.length * skip)
+    }, 300 * guess.length * skip)
 
     if ( correct.value ) {
       finished.value = true
