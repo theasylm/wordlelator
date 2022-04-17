@@ -697,15 +697,15 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="col-sm-3">Creator</td>
-                  <td class="col-sm-9">Take pride in your puzzle by optionally adding your name.</td>
-                </tr>
-                <tr>
                   <td class="col-sm-3">Number of Guesses</td>
                   <td class="col-sm-9">
                     This is the number of guesses the player has to guess your word, after any starting words you give them.<br/>
                     You may set this value to 0 to allow for infinite guesses.
                   </td>
+                </tr>
+                <tr>
+                  <td class="col-sm-3">Creator</td>
+                  <td class="col-sm-9">Take pride in your puzzle by optionally adding your name.</td>
                 </tr>
                 <tr>
                   <td class="col-sm-3">Title</td>
