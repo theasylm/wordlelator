@@ -498,6 +498,7 @@
 
   let addNewStartingWord = function() {
     newStartingWords.value.push('')
+    setTimeout(() => {document.getElementById('s' + (newStartingWords.value.length - 1)).focus()},250)
   }
 
   let gotoUrl = function() {
@@ -506,13 +507,20 @@
     }
     document.location = newUrl.value
   }
+
+  let showFormModal = function() {
+    showModal.value = true
+    setTimeout(() => {document.getElementById('word').focus()},250)
+  }
+
+
 </script>
 
 <template>
   <div class="container">
     <div class="header row">
       <div class="col-md-3">
-        <button @click="showModal = true" class="new-button btn btn-primary">
+        <button @click="showFormModal" class="new-button btn btn-primary">
           <PencilIcon></PencilIcon>New Wordle
         </button>
       </div>
