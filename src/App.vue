@@ -49,6 +49,9 @@
     creator = params['c'] || ''
     hint1 = params['h1'] || ''
     hint2 = params['h2'] || ''
+    if ( hint2 != '' ) {
+      hint2 = decrypt(hint2,false)
+    }
     msg.value = params['m'] || ''
   }
 
