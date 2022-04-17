@@ -302,7 +302,7 @@
     let playerAnswer = guess.map((e) => e['letter']).join('')
     correct.value = ( playerAnswer === word )
 
-    if ( !correct.value && !allPossibleWords.includes(playerAnswer.toUpperCase()) ){
+    if ( !correct.value && !allPossibleWords.includes(playerAnswer.toUpperCase()) && !skipAnimation ){
       showWordMissingMessage()
       return
     }
@@ -416,7 +416,7 @@
     results += document.location
     gameResults.value = results
     if (!correct.value){
-      msg.value = 'Too Bad!'
+      msg.value = 'Too Bad!<br/>Solution: ' + word.toUpperCase()
     }
   }
 
@@ -649,7 +649,7 @@
         <div class="close-modal-div">
           <XIcon @click="showWinModal = false"></XIcon>
         </div>
-        <span class="modal__title">{{msg}}</span>
+        <span class="modal__title" v-html="msg"></span>
         <div class="modal__content">
           <button class="btn btn-primary share-button" @click="copyResults">Share results</button><br/>
           <span id="copiedResultsMessage">Copied!</span>
