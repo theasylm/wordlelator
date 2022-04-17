@@ -831,6 +831,7 @@
   .solution {
     font-size: 1.5rem;
     font-weight: 500;
+    margin-top: 1.5rem;
   }
   @keyframes fade {
     0%,100% { opacity: 0 }
