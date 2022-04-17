@@ -32,7 +32,7 @@
     showModal.value = true
   }
   const wordLength = word.length > 0 ? word.length : 0
-  const dictionary = './lib/js/' + wordLength + '.js'
+  const dictionary = './assets/js/' + wordLength + '.js'
   let allWords = undefined
   async function load() {
     let wordList = await import(dictionary);
