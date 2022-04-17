@@ -1,6 +1,6 @@
 <script setup>
   import { $vfm, VueFinalModal, ModalsContainer } from 'vue-final-modal'
-  import { ref, onUnmounted } from 'vue'
+  import { ref, onUnmounted, computed } from 'vue'
   import Board from './components/Board.vue'
   import Keyboard from './components/Keyboard.vue'
   import CryptoJS from 'crypto-js'
@@ -369,6 +369,22 @@
     completeRow(true)
   }
 
+  let newWordInvalid = computed(() => {
+    return !newWord.value.match(/^[a-zA-Z]+$/)
+  })
+
+  let newNumberOfGuessesInvalid = computed(() => {
+    return newNumberOfGuesses.value < 0
+  })
+
+  let newStartingWordsInvalid = computed(() => {
+    let results = []
+    for ( let i=0; i < newStartingWords.value.length; i++){
+      results.push( newStartingWords.value[i].length != newWord.value.length )
+    }
+    return results
+  })
+
   const copy = function() {
     navigator.clipboard.writeText(newUrl.value)
     let span = document.getElementById('copiedMessage')
@@ -390,37 +406,42 @@
   }
 
   const generateUrl = function() {
-    let o = {}
-    if ( newWord.value == '' || newNumberOfGuesses.value == '' ) {
+    if ( newWordInvalid.value || newNumberOfGuessesInvalid.value || newStartingWordsInvalid.value.includes(true) ){
       return
     }
+
+    let o = {}
     o['w'] = encrypt(newWord.value.toLowerCase(),true)
+    o['g'] = newNumberOfGuesses.value
+
     if ( newCreator.value != '' ) {
       o['c'] = newCreator.value
     }
-    o['g'] = newNumberOfGuesses.value
+
     if ( newHint1.value != '' ){
       o['h1'] = newHint1.value
     }
+
     if ( newHint2.value != '' ){
       o['h2'] = encrypt(newHint2.value,false)
     }
+
     let count = 1
     for ( let i=0; i < newStartingWords.value.length; i++ ) {
-      if ( newStartingWords.value[i] != '' ){
-        if ( newStartingWords.value[i].length == newWord.value.length ){
-          o['s' + count++] = newStartingWords.value[i].toLowerCase()
-        }
-      }
+      o['s' + count++] = newStartingWords.value[i].toLowerCase()
     }
+
     if ( newMessage.value != '' ) {
       o['m'] = encrypt(newMessage.value,false)
     }
+
     newUrl.value = 'http://localhost:3000/?p=' + JSURL.stringify(o)
   }
+
   let addNewStartingWord = function() {
     newStartingWords.value.push('')
   }
+
   let gotoUrl = function() {
     if ( newUrl.value == '' ) {
       return
@@ -470,9 +491,9 @@
         <span class="modal__title">New Custom Wordle</span>
         <div class="modal__content">
           <div class="mb-3 row">
-            <label for="word" class="col-sm-4 col-form-label">Word</label>
+            <label for="word" class="col-sm-4 col-form-label" >Word</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control" id="word" v-model="newWord"/>
+              <input type="text" class="form-control" id="word" v-model="newWord" :class="{'has-error': newWordInvalid }"/>
             </div>
           </div>
           <div class="mb-3 row">
@@ -484,7 +505,7 @@
           <div class="mb-3 row">
             <label for="guesses" class="col-sm-4 col-form-label">Number of Guesses</label>
             <div class="col-sm-8">
-              <input type="number" class="form-control" id="guesses" v-model="newNumberOfGuesses"/>
+              <input type="number" class="form-control" id="guesses" v-model="newNumberOfGuesses"  :class="{'has-error': newNumberOfGuessesInvalid }"/>
             </div>
           </div>
           <div class="mb-3 row">
@@ -508,7 +529,7 @@
           <div class="mb-3 row" v-for="(sw,index) in newStartingWords">
             <label :for="'s' + index" class="col-sm-4 col-form-label">Starting Word</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control" :id="'s' + index" v-model="newStartingWords[index]"/>
+              <input type="text" class="form-control" :id="'s' + index" v-model="newStartingWords[index]" :class="{'has-error': newStartingWordsInvalid[index]}" />
             </div>
           </div>
           <div class="mb-3 row">
@@ -610,7 +631,7 @@
                 <tr>
                   <td class="col-sm-3">Word</td>
                   <td class="col-sm-9">
-                    Set a word of any length, though the dictionary only handles lengths 3-10.<br/>
+                    Set a word of any length, though the dictionary only handles lengths 2-15.<br/>
                     Words are not required to be in the dictionary to be the secret word, allowing for proper nouns and loan words.
                   </td>
                 </tr>
@@ -760,6 +781,10 @@
     color: #efefef;
     border-top: 2px solid;
     border-bottom: 2px solid;
+  }
+  .has-error {
+    border-color: #842029 !important;
+    border-width: 3px;
   }
 </style>
 <style scoped>
