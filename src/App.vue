@@ -508,7 +508,7 @@
     if ( newUrl.value == '' ) {
       return
     }
-    document.location = newUrl.value
+    window.open(newUrl.value, '_blank');
   }
 </script>
 
