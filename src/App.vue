@@ -416,7 +416,7 @@
     results += document.location
     gameResults.value = results
     if (!correct.value){
-      msg.value = 'Too Bad!<br/>Solution: ' + word.toUpperCase()
+      msg.value = 'Too Bad!'
     }
   }
 
@@ -649,8 +649,9 @@
         <div class="close-modal-div">
           <XIcon @click="showWinModal = false"></XIcon>
         </div>
-        <span class="modal__title" v-html="msg"></span>
+        <span class="modal__title">{{msg}}</span>
         <div class="modal__content">
+          <div class="solution" v-if="finished && !correct">Solution: {{word.toUpperCase()}}</div>
           <button class="btn btn-primary share-button" @click="copyResults">Share results</button><br/>
           <span id="copiedResultsMessage">Copied!</span>
         </div>
@@ -827,8 +828,9 @@
     opacity: 1;
     margin-bottom: 0;
   }
-  .warning-message {
-
+  .solution {
+    font-size: 1.5rem;
+    font-weight: 500;
   }
   @keyframes fade {
     0%,100% { opacity: 0 }
