@@ -441,7 +441,8 @@
   })
 
   const copy = function() {
-    navigator.clipboard.writeText(newUrl.value)
+    const text = "Try my custom Wordle on the Wordlelator!\n" + newUrl.value
+    navigator.clipboard.writeText(text)
     let span = document.getElementById('copiedMessage')
     let classes = span.className
     span.className += 'shown'
@@ -607,7 +608,7 @@
               <button @click="gotoUrl" class="btn btn-primary">Go to Puzzle</button>
             </div>
             <div class="col-sm-4">
-              <button @click="copy" class="btn btn-primary">Copy URL</button><br/>
+              <button @click="copy" class="btn btn-primary">Share URL</button><br/>
               <span id="copiedMessage">Copied!</span>
             </div>
             <div class="col-sm-4">
