@@ -455,7 +455,7 @@
       o['m'] = encrypt(newMessage.value,false)
     }
 
-    newUrl.value = 'http://localhost:3000/?p=' + JSURL.stringify(o)
+    newUrl.value = 'https://theasylm.github.io/wordlelator/?p=' + JSURL.stringify(o)
   }
 
   let addNewStartingWord = function() {
