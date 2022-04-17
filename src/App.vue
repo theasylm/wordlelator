@@ -24,7 +24,14 @@
 
   }
   const params = JSURL.parse((new URL(document.location)).searchParams.get('p'))
-  const word = decrypt(params['w'],true)
+  console.log(params)
+  let word = ''
+  let showModal = ref(false)
+  if ( params ){
+    word = decrypt(params['w'],true)
+  } else {
+    showModal.value = true
+  }
   const wordLength = word.length > 0 ? word.length : 5
   const dictionary = './lib/js/' + wordLength + '.js'
   let allWords = undefined
@@ -33,15 +40,19 @@
     allWords = wordList['allWordsLength' + wordLength]
   }
   load()
-  const numberOfGuesses = parseInt(params['g']) || 6
-  const creator = params['c'] || ''
-  const hint1 = params['h1'] || ''
-  let hint2 = params['h2'] || ''
-  if ( hint2 != '' ) {
-    hint2 = decrypt(hint2,false)
-  }
+  let numberOfGuesses = 6
+  let creator = ''
+  let hint1 = ''
+  let hint2 = ''
   let msg = ref('')
-  msg.value = params['m'] || ''
+  if ( params ){
+    numberOfGuesses = parseInt(params['g'])
+    creator = params['c'] || ''
+    hint1 = params['h1'] || ''
+    hint2 = params['h2'] || ''
+    msg.value = params['m'] || ''
+  }
+
   if ( msg.value != '' ) {
     msg.value = decrypt(msg.value,false)
   } else {
@@ -55,7 +66,6 @@
   let newMessage = ref('')
   let newStartingWords = ref(Array())
   let newUrl = ref('')
-  let showModal = ref(false)
   let showHintModal = ref(false)
   let showWinModal = ref(false)
   let showHelpModal = ref(false)
