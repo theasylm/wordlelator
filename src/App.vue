@@ -32,7 +32,7 @@
   } else {
     showModal.value = true
   }
-  const wordLength = word.length > 0 ? word.length : 5
+  const wordLength = word.length > 0 ? word.length : 0
   const dictionary = './lib/js/' + wordLength + '.js'
   let allWords = undefined
   async function load() {
@@ -40,7 +40,7 @@
     allWords = wordList['allWordsLength' + wordLength]
   }
   load()
-  let numberOfGuesses = 6
+  let numberOfGuesses = 0
   let creator = ''
   let hint1 = ''
   let hint2 = ''
@@ -481,7 +481,7 @@
       <span class="warning-message" :class="{'shown': notInDictionary}">Word not in dictionary.</span>
       <span class="creator" v-if="creator != ''">Creator: {{creator}}</span>
       <span class="hint1" v-if="hint1 != ''">Hint: {{hint1}}</span>
-      <span class="guess-counter">Guess: {{playerGuessCount}}/{{numberOfGuesses}}</span>
+      <span class="guess-counter" v-if="wordLength > 0">Guess: {{playerGuessCount}}/{{numberOfGuesses}}</span>
     </div>
     <Board :guesses="guesses"></Board>
     <Keyboard :rows="keyboardRows"></Keyboard>
@@ -630,6 +630,7 @@
               Yellow indicates the U is in the word, but in another position.
               <img src="./assets/grey_clue.png"/>
               Grey indicates the P is not in the word.
+              <p>Finally, your creator may have left hints for you. First, look above the grid to see if there is an open hint. Then, look and see if the light bulb is "lit up". If it is, the creator has left a hint for you to use when you're ready.</p>
               <hr/>
             </div>
           </div>
