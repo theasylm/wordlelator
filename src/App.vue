@@ -6,6 +6,7 @@
   import CryptoJS from 'crypto-js'
   import JSURL from 'jsurl'
   import { PencilIcon, QuestionMarkCircleIcon, LightBulbIcon, XIcon, ChartBarIcon } from '@heroicons/vue/outline'
+  import { allWords } from './assets/js/allWords.js'
   const encrypt = (text, useSalt) => {
     if ( useSalt ){
       let salt = Math.random().toString(36).slice(2, 6)
@@ -32,13 +33,7 @@
     showModal.value = true
   }
   const wordLength = word.length > 0 ? word.length : 0
-  const dictionary = './assets/js/' + wordLength + '.js'
-  let allWords = undefined
-  async function load() {
-    let wordList = await import(dictionary);
-    allWords = wordList['allWordsLength' + wordLength]
-  }
-  load()
+  const allPossibleWords = allWords[wordLength]
   let numberOfGuesses = 0
   let creator = ''
   let hint1 = ''
@@ -279,7 +274,7 @@
     let playerAnswer = guess.map((e) => e['letter']).join('')
     correct.value = ( playerAnswer === word )
 
-    if ( !allWords.includes(playerAnswer.toUpperCase()) ){
+    if ( !allPossibleWords.includes(playerAnswer.toUpperCase()) ){
       showWordMissingMessage()
       return
     }
