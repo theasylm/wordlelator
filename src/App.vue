@@ -827,6 +827,11 @@
     background: #011637;
     width: 500px;
     min-height: 10rem;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .modal-content::-webkit-scrollbar {
+    display: none;
   }
   ::v-deep .help-modal .modal-content {
     width:  650px;
