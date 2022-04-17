@@ -17,5 +17,10 @@
     height: calc(100vh - 19.5rem);
    /**height: 10rem;**/
     overflow: scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .board::-webkit-scrollbar {
+    display: none;
   }
 </style>
