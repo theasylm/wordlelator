@@ -24,7 +24,6 @@
 
   }
   const params = JSURL.parse((new URL(document.location)).searchParams.get('p'))
-  console.log(params)
   let word = ''
   let showModal = ref(false)
   if ( params ){
@@ -89,12 +88,20 @@
     }
   }
 
-  for ( let i=0; i < numberOfGuesses; i++ ){
+  const addEmptyRow = function() {
     let initialGuess = []
     for ( let i=0; i < wordLength; i++ ) {
       initialGuess.push({ 'letter': '', 'state': 0, 'initialized': false })
     }
     guesses.value.push(initialGuess)
+  }
+
+  for ( let i=0; i < numberOfGuesses; i++ ){
+    addEmptyRow()
+  }
+
+  if ( numberOfGuesses == 0 && wordLength != 0 ) {
+    addEmptyRow()
   }
 
   let keyboardRows = ref([
@@ -323,10 +330,13 @@
 
     currentGuess.value++
     if (!skipAnimation ){
-      if (playerGuessCount.value < numberOfGuesses ){
+      if (playerGuessCount.value < numberOfGuesses || numberOfGuesses == 0 ){
         playerGuessCount.value++
       } else {
         finished.value = true
+      }
+      if ( numberOfGuesses == 0 ) {
+        addEmptyRow()
       }
     }
   }
@@ -357,7 +367,7 @@
 
   const genGameResults = function() {
     let emoji = ['','',':white_large_square:',':yellow_square:',':green_square:']
-    let results = 'I ' + (correct.value ? 'solved ' : 'did not solve ') + ( creator ? creator + "'s" : 'this' ) + " Custom Wordle on the Wordlelator! " + (correct.value ? playerGuessCount.value : 'X' ) + '/' + numberOfGuesses + "\n"
+    let results = 'I ' + (correct.value ? 'solved ' : 'did not solve ') + ( creator ? creator + "'s" : 'this' ) + " Custom Wordle on the Wordlelator! " + (correct.value ? playerGuessCount.value : 'X' ) + '/' + (numberOfGuesses > 0 ? numberOfGuesses : '∞' ) + "\n"
     for ( let i=0; i < guesses.value.length; i++ ){
       for ( let x=0; x < wordLength; x++ ) {
         let result = emoji[guesses.value[i][x]['state']]
@@ -481,7 +491,7 @@
       <span class="warning-message" :class="{'shown': notInDictionary}">Word not in dictionary.</span>
       <span class="creator" v-if="creator != ''">Creator: {{creator}}</span>
       <span class="hint1" v-if="hint1 != ''">Hint: {{hint1}}</span>
-      <span class="guess-counter" v-if="wordLength > 0">Guess: {{playerGuessCount}}/{{numberOfGuesses}}</span>
+      <span class="guess-counter" v-if="wordLength > 0">Guess: {{playerGuessCount}}/{{numberOfGuesses > 0 ? numberOfGuesses : '∞'}}</span>
     </div>
     <Board :guesses="guesses"></Board>
     <Keyboard :rows="keyboardRows"></Keyboard>
@@ -628,9 +638,10 @@
               Green indicates the N is in the correct spot.
               <img src="./assets/yellow_clue.png"/>
               Yellow indicates the U is in the word, but in another position.
-              <img src="./assets/grey_clue.png"/>
-              Grey indicates the P is not in the word.
-              <p>Finally, your creator may have left hints for you. First, look above the grid to see if there is an open hint. Then, look and see if the light bulb is "lit up". If it is, the creator has left a hint for you to use when you're ready.</p>
+              <p><img src="./assets/grey_clue.png"/>
+              Grey indicates the P is not in the word.</p>
+              <p>Your creator may have left hints for you. First, look above the grid to see if there is an open hint. Then, look and see if the light bulb is "lit up". If it is, the creator has left a hint for you to use when you're ready.</p>
+              <p>Finally, the given number of tries is set by the creator and can be no limit. Look above the grid to see how many guesses you have.</p>
               <hr/>
             </div>
           </div>
@@ -652,7 +663,10 @@
                 </tr>
                 <tr>
                   <td class="col-sm-3">Number of Guesses</td>
-                  <td class="col-sm-9">This is the number of guesses the player has to guess your word, after any starting words you give them.</td>
+                  <td class="col-sm-9">
+                    This is the number of guesses the player has to guess your word, after any starting words you give them.<br/>
+                    You may set this value to 0 to allow for infinite guesses.
+                  </td>
                 </tr>
                 <tr>
                   <td class="col-sm-3">Short, Visible Hint</td>
