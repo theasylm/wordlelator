@@ -435,7 +435,7 @@
   let newStartingWordsInvalid = computed(() => {
     let results = []
     for ( let i=0; i < newStartingWords.value.length; i++){
-      results.push( newStartingWords.value[i].length != newWord.value.length && newStartingWords.value[i].length != 0 )
+      results.push( (newStartingWords.value[i].length != newWord.value.length || !newStartingWords.value[i].match(/^[a-zA-Z]+$/)) && newStartingWords.value[i].length != 0 )
     }
     return results
   })
