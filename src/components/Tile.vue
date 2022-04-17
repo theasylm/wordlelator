@@ -50,7 +50,7 @@
     align-items: center;
     font-size: 2rem;
     font-weight: 600;
-    transition: transform .8s;
+    transition: transform .5s;
 
   }
   .unguessed {

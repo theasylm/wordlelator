@@ -287,7 +287,7 @@
         keyboardUpdates.push([guess[i]['letter'],4])
         setTimeout( () => {
           guess[i]['state'] = 4
-        }, 500 * (i+1) * skip)
+        }, 400 * (i+1) * skip)
       }
     }
 
@@ -298,7 +298,7 @@
         keyboardUpdates.push([guess[i]['letter'],3])
         setTimeout( () => {
           guess[i]['state'] = 3
-        }, 500 * (i+1) * skip)
+        }, 400 * (i+1) * skip)
       }
     }
 
@@ -307,7 +307,7 @@
         keyboardUpdates.push([guess[i]['letter'],2])
         setTimeout( () => {
           guess[i]['state'] = 2
-        }, 500 * (i+1) * skip)
+        }, 400 * (i+1) * skip)
       }
     }
 
@@ -319,7 +319,7 @@
         genGameResults()
         showWinModal.value = true
       }
-    }, 600 * guess.length * skip)
+    }, 450 * guess.length * skip)
 
     if ( correct.value ) {
       finished.value = true
