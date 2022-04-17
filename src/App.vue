@@ -510,7 +510,7 @@
 
   let showFormModal = function() {
     showModal.value = true
-    setTimeout(() => {document.getElementById('word').focus()},250)
+    setTimeout(() => {document.getElementById('word').focus()},350)
   }
 
 
