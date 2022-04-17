@@ -678,7 +678,7 @@
               Yellow indicates the U is in the word, but in another position.
               <p><img src="./assets/grey_clue.png"/>
               Grey indicates the P is not in the word.</p>
-              <p>Your creator may have left hints for you. First, look above the grid to see if there is an open hint. Then, look and see if the light bulb is "lit up". If it is, the creator has left a hint for you to use when you're ready.</p>
+              <p>Your creator may have left a hint for you. Look to see if the light bulb is "lit up". If it is, the creator has left a hint for you to use when you're ready.</p>
               <p>Finally, the given number of tries is set by the creator and can be no limit. Look above the grid to see how many guesses you have.</p>
               <hr/>
             </div>
@@ -686,7 +686,8 @@
           <h2>How to Create</h2>
           <div class="row">
             <div class="col-sm-12">
-              To create your own custom Wordle, hit the 'New Wordle' button. On the form presented, you can enter a number of different options. The only required entries are Word and Number of Guesses.
+              <p>
+              To create your own custom Wordle, hit the 'New Wordle' button. On the form presented, you can enter a number of different options. The only required entries are Word and Number of Guesses.</p>
               <table class="table">
                 <tr>
                   <td class="col-sm-3">Word</td>
@@ -824,6 +825,7 @@
     background-color: #efefef;
     border: none;
     opacity: 1;
+    margin-bottom: 0;
   }
   .warning-message {
 
