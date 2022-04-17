@@ -274,7 +274,7 @@
     let playerAnswer = guess.map((e) => e['letter']).join('')
     correct.value = ( playerAnswer === word )
 
-    if ( !allPossibleWords.includes(playerAnswer.toUpperCase()) ){
+    if ( !correct.value && !allPossibleWords.includes(playerAnswer.toUpperCase()) ){
       showWordMissingMessage()
       return
     }
@@ -366,11 +366,11 @@
   const genGameResults = function() {
     let emoji = ['','',':white_large_square:',':yellow_square:',':green_square:']
     let results = 'I ' + (correct.value ? 'solved ' : 'did not solve ') + ( creator ? creator + "'s" : 'this' ) + " Custom Wordle on the Wordlelator! " + (correct.value ? playerGuessCount.value : 'X' ) + '/' + (numberOfGuesses > 0 ? numberOfGuesses : '∞' ) + "\n"
+    loop:
     for ( let i=0; i < guesses.value.length; i++ ){
       for ( let x=0; x < wordLength; x++ ) {
-        let result = emoji[guesses.value[i][x]['state']]
-        if ( result == '' ){
-          break;
+        if ( guesses.value[i][x]['state'] == 0 ){
+          break loop
         }
         results += emoji[guesses.value[i][x]['state']]
       }
@@ -552,13 +552,14 @@
           </div>
           <div class="mb-3 row">
             <div class="col-sm-12">
-              <a class="add-link" @click="addNewStartingWord">Add Starting Word</a>
+              <button class="btn btn-primary" @click="addNewStartingWord">Add Starting Word</button>
             </div>
           </div>
         </div>
         <div class="modal__action">
           <div class="mb-3 row">
-            <div class="col-sm-12">
+            <div class="col-sm-12 left-align">
+              <label for="url" >Puzzle URL</label>
               <textarea id="url" onclick="this.focus();this.select()" readonly="readonly" v-model="newUrl"></textarea>
             </div>
           </div>
@@ -754,6 +755,9 @@
     right: .5rem;
     margin-top: -.5rem;
     cursor: pointer;
+  }
+  .left-align {
+    text-align: left;
   }
   .help svg {
     width: 36px;
