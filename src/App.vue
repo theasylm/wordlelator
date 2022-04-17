@@ -744,6 +744,12 @@
 </template>
 
 <style>
+  body, html {
+    height: 100%;
+  }
+  body {
+    overflow: hidden;
+  }
   #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -752,7 +758,7 @@
     color: #efefef;
     /**background-color: #08111b;**/
     background-color: #011637;
-    height: 100vh;
+    height: 100%;
     padding-top: 1em;
   }
   .header {
