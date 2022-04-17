@@ -525,7 +525,7 @@
     <div class="info">
       <span class="warning-message" :class="{'shown': notInDictionary}">Word not in dictionary.</span>
       <span class="creator" v-if="creator != ''">Creator: {{creator}}</span>
-      <span class="hint1" v-if="hint1 != ''">Hint: {{hint1}}</span>
+      <span class="hint1" v-if="hint1 != ''">Title: {{hint1}}</span>
       <span class="guess-counter" v-if="wordLength > 0">Guess: {{playerGuessCount}}/{{numberOfGuesses > 0 ? numberOfGuesses : '∞'}}</span>
     </div>
     <Board :guesses="guesses"></Board>
@@ -564,7 +564,7 @@
             </div>
           </div>
           <div class="mb-3 row">
-            <label for="hint1" class="col-sm-4 col-form-label">Short, Visible Hint</label>
+            <label for="hint1" class="col-sm-4 col-form-label">Title</label>
             <div class="col-sm-8">
               <input type="text" class="form-control" id="hint1" v-model="newHint1"/>
             </div>
@@ -705,9 +705,9 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="col-sm-3">Short, Visible Hint</td>
+                  <td class="col-sm-3">Title</td>
                   <td class="col-sm-9">
-                    A short hint that will be displayed above the puzzle.<br/>
+                    A title that will be displayed above the puzzle.<br/>
                     Can be used to denote content-specific puzzles, for example.
                   </td>
                 </tr>
