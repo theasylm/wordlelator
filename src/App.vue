@@ -22,7 +22,10 @@
     } else {
       return word
     }
-
+  }
+  let showFormModal = function() {
+    showModal.value = true
+    setTimeout(() => {document.getElementById('word').focus()},350)
   }
   const params = JSURL.parse((new URL(document.location)).searchParams.get('p'))
   let word = ''
@@ -30,7 +33,7 @@
   if ( params ){
     word = decrypt(params['w'],true)
   } else {
-    showModal.value = true
+    showFormModal()
   }
   const wordLength = word.length > 0 ? word.length : 0
   const allPossibleWords = allWords[wordLength]
@@ -507,13 +510,6 @@
     }
     document.location = newUrl.value
   }
-
-  let showFormModal = function() {
-    showModal.value = true
-    setTimeout(() => {document.getElementById('word').focus()},350)
-  }
-
-
 </script>
 
 <template>
