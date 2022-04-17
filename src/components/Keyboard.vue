@@ -45,4 +45,15 @@
     }
 
   }
+  @media (max-width: 400px){
+    .keyboard .tile {
+      width:  1rem;
+      height: 1.5rem;
+      font-size: .75rem;
+    }
+    .keyboard .tile.wide {
+      width: 2.25rem;
+    }
+
+  }
 </style>
