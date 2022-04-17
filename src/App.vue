@@ -388,7 +388,7 @@
   }
 
   let newWordInvalid = computed(() => {
-    return !newWord.value.match(/^[a-zA-Z]+$/)
+    return !newWord.value.match(/^[a-zA-Z]+$/) || newWord.value.length < 2 || newWord.value.length > 15
   })
 
   let newNumberOfGuessesInvalid = computed(() => {
@@ -652,7 +652,7 @@
                 <tr>
                   <td class="col-sm-3">Word</td>
                   <td class="col-sm-9">
-                    Set a word of any length, though the dictionary only handles lengths 2-15.<br/>
+                    Set a word of length 2-15 - limited the dictionary only handles lengths 2-15.<br/>
                     Words are not required to be in the dictionary to be the secret word, allowing for proper nouns and loan words.
                   </td>
                 </tr>
