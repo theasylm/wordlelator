@@ -26,6 +26,13 @@
   const params = JSURL.parse((new URL(document.location)).searchParams.get('p'))
   const word = decrypt(params['w'],true)
   const wordLength = word.length > 0 ? word.length : 5
+  const dictionary = './lib/js/' + wordLength + '.js'
+  let allWords = undefined
+  async function load() {
+    let wordList = await import(dictionary);
+    allWords = wordList['allWordsLength' + wordLength]
+  }
+  load()
   const numberOfGuesses = parseInt(params['g']) || 6
   const creator = params['c'] || ''
   const hint1 = params['h1'] || ''
@@ -59,6 +66,7 @@
   let gameResults = ref('')
   let finished = ref(false)
   let correct = ref(false)
+  let notInDictionary = ref(false)
 
   for ( let key in params ) {
     let initialGuess = []
@@ -250,6 +258,11 @@
     let answerLetters = word.split('')
     let playerAnswer = guess.map((e) => e['letter']).join('')
     correct.value = ( playerAnswer === word )
+
+    if ( !allWords.includes(playerAnswer.toUpperCase()) ){
+      showWordMissingMessage()
+      return
+    }
     let changedLetters = []
     let keyboardUpdates = []
     for ( let i=0; i < guess.length; i++ ) {
@@ -306,6 +319,13 @@
         finished.value = true
       }
     }
+  }
+
+  const showWordMissingMessage = function() {
+    notInDictionary.value = true
+    setTimeout(() => {
+      notInDictionary.value = false
+    },1500)
   }
 
   const updateKeyboard = function(letter,state) {
@@ -427,6 +447,7 @@
       </div>
     </div>
     <div class="info">
+      <span class="warning-message" :class="{'shown': notInDictionary}">Word not in dictionary.</span>
       <span class="creator" v-if="creator != ''">Creator: {{creator}}</span>
       <span class="hint1" v-if="hint1 != ''">Hint: {{hint1}}</span>
       <span class="guess-counter">Guess: {{playerGuessCount}}/{{numberOfGuesses}}</span>
@@ -657,6 +678,17 @@
   .title {
     font-size: 2em;
   }
+  .info {
+    position: relative;
+  }
+  .warning-message {
+    position: absolute;
+    top: -1.2rem;
+    display: none;
+  }
+  .warning-message.shown {
+    display: block;
+  }
   #url {
     width:  100%;
   }
@@ -700,7 +732,9 @@
     border: none;
     opacity: 1;
   }
+  .warning-message {
 
+  }
   @keyframes fade {
     0%,100% { opacity: 0 }
     50% { opacity: 1 }
