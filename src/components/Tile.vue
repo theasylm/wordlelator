@@ -34,7 +34,9 @@
 </script>
 
 <template>
-  <div class="tile" :class="[statusClasses[state],{ wide: letter.length > 1, revealed: state > 1 && !keyboard && !initialized }]" @click="clickTile">{{letter}}</div>
+  <div class="tile" :class="[statusClasses[state],{ wide: letter.length > 1, revealed: state > 1 && !keyboard && !initialized }]" @click="clickTile">
+    <div class="letter">{{letter}}</div>
+  </div>
 </template>
 
 <style>
@@ -71,6 +73,10 @@
     width: 7.5rem;
   }
   .tile.revealed {
-    transform: rotateX(360deg);
+    transform: rotateX(180deg);
+  }
+  .tile.revealed .letter {
+    transform: rotateX(180deg);
+    transition: transform .5s;
   }
 </style>

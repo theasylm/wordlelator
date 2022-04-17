@@ -652,7 +652,7 @@
                 <tr>
                   <td class="col-sm-3">Word</td>
                   <td class="col-sm-9">
-                    Set a word of length 2-15 - limited the dictionary only handles lengths 2-15.<br/>
+                    Set a word of length 2-15 - limited as the dictionary only handles lengths 2-15.<br/>
                     Words are not required to be in the dictionary to be the secret word, allowing for proper nouns and loan words.
                   </td>
                 </tr>
@@ -827,10 +827,12 @@
     background: #011637;
     width: 500px;
     min-height: 10rem;
+  }
+  .modal__content {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
   }
-  .modal-content::-webkit-scrollbar {
+  .modal__content::-webkit-scrollbar {
     display: none;
   }
   ::v-deep .help-modal .modal-content {
