@@ -116,6 +116,11 @@
   let keyboardRows = ref([
     [
       {
+        'letter': '_',
+        'state': 1,
+        'colored': true
+      },
+      {
         'letter': 'q',
         'state': 1,
         'colored': true
@@ -272,7 +277,10 @@
     if (showModal.value) {
       return
     }
-    if (/^[a-zA-Z]$/.test(key)) {
+    if (/^[a-zA-Z_\-]$/.test(key)) {
+      if (key == '-') {
+        key = '_'
+      }
       fillTile(key.toLowerCase())
     } else if (key === 'Backspace') {
       clearTile()
