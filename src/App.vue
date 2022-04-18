@@ -27,7 +27,13 @@
     showModal.value = true
     setTimeout(() => {document.getElementById('word').focus()},350)
   }
-  const params = JSURL.parse((new URL(document.location)).searchParams.get('p'))
+  let params = (new URL(document.location)).searchParams.get('p')
+  if ( params ) {
+    if ( !params.match(/\)$/) ){
+      params += ")"
+    }
+    params = JSURL.parse(params)
+  }
   let word = ''
   let showModal = ref(false)
   if ( params ){
