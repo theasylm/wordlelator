@@ -116,11 +116,6 @@
   let keyboardRows = ref([
     [
       {
-        'letter': '_',
-        'state': 1,
-        'colored': true
-      },
-      {
         'letter': 'q',
         'state': 1,
         'colored': true
@@ -167,6 +162,11 @@
       },
       {
         'letter': 'p',
+        'state': 1,
+        'colored': true
+      },
+      {
+        'letter': '_',
         'state': 1,
         'colored': true
       }
