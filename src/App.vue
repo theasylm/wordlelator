@@ -444,6 +444,7 @@
   })
 
   const copy = function() {
+    generateUrl()
     const text = "Try my custom Wordle on the Wordlelator!\n" + newUrl.value
     navigator.clipboard.writeText(text)
     let span = document.getElementById('copiedMessage')
@@ -505,9 +506,7 @@
   }
 
   let gotoUrl = function() {
-    if ( newUrl.value == '' ) {
-      return
-    }
+    generateUrl()
     window.open(newUrl.value, '_blank');
   }
 </script>
@@ -614,9 +613,6 @@
             <div class="col-sm-4">
               <button @click="copy" class="btn btn-primary">Share URL</button><br/>
               <span id="copiedMessage">Copied!</span>
-            </div>
-            <div class="col-sm-4">
-              <button @click="generateUrl" class="btn btn-primary">Generate URL</button>
             </div>
           </div>
         </div>
