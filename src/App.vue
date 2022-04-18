@@ -387,6 +387,13 @@
     }
   }
 
+  let newWordNotInDictionary = computed(() => {
+    if (newWord.value.length < 2 || newWord.value.length > 15) {
+      return false
+    }
+    return ( !allWords[newWord.value.length].includes(newWord.value.toUpperCase()) )
+  })
+
   const showWordMissingMessage = function() {
     notInDictionary.value = true
     setTimeout(() => {
@@ -570,6 +577,7 @@
             <label for="word" class="col-sm-4 col-form-label" >Word</label>
             <div class="col-sm-8">
               <input type="text" class="form-control" id="word" v-model="newWord" :class="{'has-error': newWordInvalid }"/>
+              <span class="new-word-warning-message" :class="{'shown': newWordNotInDictionary }">Warning: word not in dictionary.</span>
             </div>
           </div>
           <div class="mb-3 row">
@@ -811,6 +819,13 @@
   }
   .warning-message.shown {
     display: block;
+  }
+  .new-word-warning-message {
+    visibility: hidden;
+    color: #ffc107;
+  }
+  .new-word-warning-message.shown {
+    visibility: visible;
   }
   #url {
     width:  100%;
