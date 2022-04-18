@@ -544,7 +544,6 @@
       </div>
     </div>
     <div class="info">
-      {{revealStartingLetter}}
       <span class="warning-message" :class="{'shown': notInDictionary}">Word not in dictionary.</span>
       <span class="creator" v-if="creator != ''">Creator: {{creator}}</span>
       <span class="hint1" v-if="hint1 != ''">Title: {{hint1}}</span>
