@@ -600,7 +600,7 @@
           </div>
         </div>
         <div class="modal__action">
-          <div class="mb-3 row">
+          <div class="mb-3 row url-row">
             <div class="col-sm-12 left-align">
               <label for="url" >Puzzle URL</label>
               <textarea id="url" onclick="this.focus();this.select()" readonly="readonly" v-model="newUrl"></textarea>
@@ -925,6 +925,9 @@
   @media (max-width: 786px){
     .newModal .btn {
       margin: .5rem 0;
+    }
+    .url-row {
+      display: none;
     }
   }
 </style>
