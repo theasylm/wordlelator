@@ -540,7 +540,7 @@
       <vue-final-modal
         name="newWordle"
         classes="modal-container newModal"
-        :click-to-close="true"
+        :click-to-close="false"
         :esc-to-close="true"
         v-model="showModal"
         content-class="modal-content"
@@ -620,7 +620,7 @@
       <vue-final-modal
         name="hintModal"
         classes="modal-container"
-        :click-to-close="true"
+        :click-to-close="false"
         :esc-to-close="true"
         v-model="showHintModal"
         content-class="modal-content"
@@ -641,7 +641,7 @@
       <vue-final-modal
         name="winModal"
         classes="modal-container"
-        :click-to-close="true"
+        :click-to-close="false"
         :esc-to-close="true"
         v-model="showWinModal"
         content-class="modal-content"
@@ -660,7 +660,7 @@
       <vue-final-modal
         name="helpModal"
         classes="modal-container help-modal"
-        :click-to-close="true"
+        :click-to-close="false"
         :esc-to-close="true"
         v-model="showHelpModal"
         content-class="modal-content"
