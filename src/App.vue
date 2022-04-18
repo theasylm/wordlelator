@@ -777,7 +777,7 @@
               </table>
             </div>
             <div class="col-sm-12">
-              Once you've filled in all the boxes you're interested in, hit the 'Generate URL' button to generate the URL that will take you to your puzzle. Also provided are buttons to automatically copy the URL, as well as visiting your puzzle, so you can check for errors.
+              Once you've filled in all the boxes you're interested in, hit either the 'Go to Puzzle' button (good for testing your puzzle), or the 'Share URL' button, which will copy the puzzle URL with a handy message ready for pasting in chat, email, or wherever.
             </div>
           </div>
         </div>
