@@ -42,6 +42,7 @@
   let hint1 = ''
   let hint2 = ''
   let msg = ref('')
+  let revealStartingLetter = false
   if ( params ){
     numberOfGuesses = parseInt(params['g'])
     creator = params['c'] || ''
@@ -50,6 +51,7 @@
     if ( hint2 != '' ) {
       hint2 = decrypt(hint2,false)
     }
+    revealStartingLetter = params['r'] == 1 ? true : false
     msg.value = params['m'] || ''
   }
 
@@ -65,6 +67,7 @@
   let newHint2 = ref('')
   let newMessage = ref('')
   let newStartingWords = ref(Array())
+  let newRevealStartingLetter = ref(false)
   let newUrl = ref('')
   let showHintModal = ref(false)
   let showWinModal = ref(false)
@@ -91,7 +94,12 @@
 
   const addEmptyRow = function() {
     let initialGuess = []
-    for ( let i=0; i < wordLength; i++ ) {
+    if ( revealStartingLetter ) {
+      initialGuess.push({ 'letter': word.charAt(0), 'state': 4, 'initialized': true, 'colored': true })
+    } else {
+      initialGuess.push({ 'letter': '', 'state': 0, 'initialized': false, 'colored': false })
+    }
+    for ( let i=1; i < wordLength; i++ ) {
       initialGuess.push({ 'letter': '', 'state': 0, 'initialized': false, 'colored': false })
     }
     guesses.value.push(initialGuess)
@@ -406,15 +414,18 @@
   const genGameResults = function() {
     let emoji = ['','',':white_large_square:',':yellow_square:',':green_square:']
     let results = 'I ' + (correct.value ? 'solved ' : 'did not solve ') + ( creator ? creator + "'s" : 'this' ) + " Custom Wordle on the Wordlelator! " + (correct.value ? playerGuessCount.value : 'X' ) + '/' + (numberOfGuesses > 0 ? numberOfGuesses : '∞' ) + "\n"
-    loop:
     for ( let i=0; i < guesses.value.length; i++ ){
+      let row = []
       for ( let x=0; x < wordLength; x++ ) {
         if ( guesses.value[i][x]['state'] == 0 ){
-          break loop
+          break
         }
-        results += emoji[guesses.value[i][x]['state']]
+        row.push(emoji[guesses.value[i][x]['state']])
       }
-      results += "\n"
+      if ( row.length == word.length ){
+        results += row.join('')
+        results += "\n"
+      }
     }
     results += document.location
     gameResults.value = results
@@ -493,6 +504,10 @@
       }
     }
 
+    if ( newRevealStartingLetter.value ) {
+      o['r'] = 1
+    }
+
     if ( newMessage.value != '' ) {
       o['m'] = encrypt(newMessage.value,false)
     }
@@ -529,6 +544,7 @@
       </div>
     </div>
     <div class="info">
+      {{revealStartingLetter}}
       <span class="warning-message" :class="{'shown': notInDictionary}">Word not in dictionary.</span>
       <span class="creator" v-if="creator != ''">Creator: {{creator}}</span>
       <span class="hint1" v-if="hint1 != ''">Title: {{hint1}}</span>
@@ -561,6 +577,14 @@
             <label for="guesses" class="col-sm-4 col-form-label">Number of Guesses</label>
             <div class="col-sm-8">
               <input type="number" class="form-control" id="guesses" v-model="newNumberOfGuesses"  :class="{'has-error': newNumberOfGuessesInvalid }"/>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label for="startingLetter" class="col-sm-4 col-form-label">Reveal starting letter</label>
+            <div class="col-sm-8">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="startingLetter" v-model="newRevealStartingLetter">
+              </div>
             </div>
           </div>
           <div class="mb-3 row">
@@ -703,6 +727,13 @@
                   <td class="col-sm-9">
                     This is the number of guesses the player has to guess your word, after any starting words you give them.<br/>
                     You may set this value to 0 to allow for infinite guesses.
+                  </td>
+                </tr>
+                <tr>
+                  <td class="col-sm-3">Reveal Starting Letter</td>
+                  <td class="col-sm-9">
+                    Reveals the starting letter immediately to the solver and automatically places it.<br/>
+                    Recommended for long words.
                   </td>
                 </tr>
                 <tr>
@@ -876,7 +907,7 @@
     border: 1px solid #efefef;
     border-radius: 0.25rem;
     background: #011637;
-    width: 500px;
+    width: 600px;
     min-height: 10rem;
   }
   .modal__content {
