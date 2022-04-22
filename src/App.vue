@@ -820,12 +820,11 @@
     position: relative;
   }
   .warning-message {
-    position: absolute;
-    top: -1.2rem;
-    display: none;
+    visibility: hidden;
+    margin: 0;
   }
   .warning-message.shown {
-    display: block;
+    visibility: visible;
   }
   .new-word-warning-message {
     visibility: hidden;
