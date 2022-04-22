@@ -170,11 +170,6 @@
         'letter': 'p',
         'state': 1,
         'colored': true
-      },
-      {
-        'letter': '_',
-        'state': 1,
-        'colored': true
       }
     ],
     [
@@ -220,6 +215,11 @@
       },
       {
         'letter': 'l',
+        'state': 1,
+        'colored': true
+      },
+      {
+        'letter': '_',
         'state': 1,
         'colored': true
       }
