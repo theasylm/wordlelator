@@ -704,7 +704,7 @@
         <div class="close-modal-div">
           <XIcon @click="showWinModal = false"></XIcon>
         </div>
-        <span class="modal__title">{{msg}}</span>
+        <span class="modal__title" id="win-msg">{{msg}}</span>
         <div class="modal__content">
           <div class="solution" v-if="finished && !correct">Solution: {{word.toUpperCase()}}</div>
           <button class="btn btn-primary share-button" @click="copyResults">Share results</button><br/>
@@ -936,7 +936,9 @@
     align-items: center;
     justify-content: center;
   }
-
+  #win-msg {
+    font-size:  2.25rem;
+  }
 </style>
 <style scoped>
   ::v-deep .modal-content {
