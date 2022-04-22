@@ -545,6 +545,11 @@
     generateUrl()
     window.open(newUrl.value, '_blank');
   }
+
+  if ( hint1 != '' ){
+    window.setTimeout( () => {
+      document.getElementById('board').style.height ='calc(100vh - 22.5rem)';}, 100)
+  }
 </script>
 
 <template>
@@ -982,9 +987,6 @@
   @media (max-width: 786px){
     .newModal .btn {
       margin: .5rem 0;
-    }
-    .url-row {
-      display: none;
     }
   }
 </style>
