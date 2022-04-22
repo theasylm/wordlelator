@@ -645,12 +645,6 @@
           </div>
         </div>
         <div class="modal__action">
-          <div class="mb-3 row url-row">
-            <div class="col-sm-12 left-align">
-              <label for="url" >Puzzle URL</label>
-              <textarea id="url" onclick="this.focus();this.select()" readonly="readonly" v-model="newUrl"></textarea>
-            </div>
-          </div>
           <div class="mb-3 row">
             <div class="col-sm-4">
               <button @click="gotoUrl" class="btn btn-primary">Go to Puzzle</button>
