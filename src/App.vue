@@ -565,10 +565,12 @@
       </div>
     </div>
     <div class="info">
-      <span class="warning-message" :class="{'shown': notInDictionary}">Word not in dictionary.</span>
-      <span class="creator" v-if="creator != ''">Creator: {{creator}}</span>
-      <span class="hint1" v-if="hint1 != ''">Title: {{hint1}}</span>
-      <span class="guess-counter" v-if="wordLength > 0">Guess: {{playerGuessCount}}/{{numberOfGuesses > 0 ? numberOfGuesses : '∞'}}</span>
+      <h5 class="warning-message" :class="{'shown': notInDictionary}">Word not in dictionary.</h5>
+      <h3 v-if="hint1 != ''">{{hint1}}</h3>
+      <div>
+        <span class="creator" v-if="creator != ''">Creator: {{creator}}</span>
+        <span class="guess-counter" v-if="wordLength > 0">Guess: {{playerGuessCount}}/{{numberOfGuesses > 0 ? numberOfGuesses : '∞'}}</span>
+      </div>
     </div>
     <Board :guesses="guesses"></Board>
     <Keyboard :rows="keyboardRows"></Keyboard>
@@ -897,13 +899,9 @@
     color: #efefef;
   }
 
-  .info {
-    display: flex;
-    justify-content: center;
-  }
-
   .info span {
     margin: 0 .5rem;
+    font-size:  1.25rem;
   }
   table.table {
     color: #efefef;
@@ -915,7 +913,7 @@
     border-width: 4px;
   }
   .hint-span {
-    font-size:  2rem;
+    font-size:  2.5rem;
   }
   .hint-div {
     height: 10rem;
@@ -923,6 +921,7 @@
     align-items: center;
     justify-content: center;
   }
+
 </style>
 <style scoped>
   ::v-deep .modal-content {
