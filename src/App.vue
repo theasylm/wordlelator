@@ -86,6 +86,8 @@
   let finished = ref(false)
   let correct = ref(false)
   let notInDictionary = ref(false)
+  let usedHint = ref(false)
+  let usedHintBefore = ref(0)
 
   for ( let key in params ) {
     let initialGuess = []
@@ -444,6 +446,9 @@
         row.push(emoji[guesses.value[i][x]['state']])
       }
       if ( row.length == word.length ){
+        if ( usedHint.value && usedHintBefore.value == i){
+          results += "* "
+        }
         results += row.join('')
         results += "\n"
       }
@@ -549,6 +554,12 @@
   if ( hint1 != '' ){
     window.setTimeout( () => {
       document.getElementById('board').style.height ='calc(100vh - 22.5rem)';}, 100)
+  }
+
+  let openHintModal = function() {
+    showHintModal.value = false
+    usedHint.value = true
+    usedHintBefore.value = currentGuess.value
   }
 </script>
 
@@ -673,7 +684,7 @@
         :max-width="500"
       >
         <div class="close-modal-div">
-          <XIcon @click="showHintModal = false"></XIcon>
+          <XIcon @click="openHintModal"></XIcon>
         </div>
         <div class="modal__content hint">
           <div class="hint-div">
