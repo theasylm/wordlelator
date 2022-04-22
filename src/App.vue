@@ -674,12 +674,9 @@
         <div class="close-modal-div">
           <XIcon @click="showHintModal = false"></XIcon>
         </div>
-        <span class="modal__title">Hint</span>
-        <div class="modal__content">
-          <div class="mb-3 row">
-            <div class="col-sm-12">
-              <span class="hint-span">{{hint2}}</span>
-            </div>
+        <div class="modal__content hint">
+          <div class="hint-div">
+            <div class="hint-span">{{hint2}}</div>
           </div>
         </div>
       </vue-final-modal>
@@ -922,6 +919,15 @@
   .has-error {
     border-color: #842029 !important;
     border-width: 4px;
+  }
+  .hint-span {
+    font-size:  2rem;
+  }
+  .hint-div {
+    height: 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>
 <style scoped>
