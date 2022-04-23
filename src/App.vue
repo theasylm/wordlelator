@@ -783,7 +783,8 @@
               <p><img src="./assets/grey_clue.png"/>
               Grey indicates the P is not in the word.</p>
               <p>Your creator may have left a hint for you. Look to see if the light bulb is "lit up". If it is, the creator has left a hint for you to use when you're ready.</p>
-              <p>Finally, the given number of tries is set by the creator and can be no limit. Look above the grid to see how many guesses you have.</p>
+              <p>The given number of tries is set by the creator and can be no limit. Look above the grid to see how many guesses you have. </p>
+              <p>Finally, if you wish to give up, you can hit the red X. You will be asked to confirm your decision.</p>
               <hr/>
             </div>
           </div>
