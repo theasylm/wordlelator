@@ -593,7 +593,7 @@
         <span class="title">Wordlelator</span>
       </div>
       <div class="col-md-3 help">
-        <XIcon class="give-up-icon" @click="showConfirmModal = true"></XIcon>
+        <XIcon class="give-up-icon" @click="showConfirmModal = (true && !finished)"></XIcon>
         <ChartBarIcon :class="{ inactive: !finished }" @click="showWinModal = (true && finished)"></ChartBarIcon>
         <QuestionMarkCircleIcon @click="showHelpModal = true"></QuestionMarkCircleIcon>
         <LightBulbIcon :class="{ inactive: hint2 == '' }" @click="showHintModal = (true && hint2 != '')"></LightBulbIcon>
