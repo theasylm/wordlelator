@@ -990,9 +990,11 @@
   }
   .give-up-icon {
     color:  #842029;
+    width:  46px !important;
   }
   .warning {
     font-size: 2rem;
+
   }
 </style>
 <style scoped>
