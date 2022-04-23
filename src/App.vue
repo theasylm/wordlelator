@@ -435,7 +435,8 @@
   }
 
   const genGameResults = function() {
-    let emoji = ['','',':white_large_square:',':yellow_square:',':green_square:']
+    let emoji = ['','','⬜','🟨','🟩']
+    let hintEmoji = ['','','⚪','🟡','🟢']
     let results = 'I ' + (correct.value ? 'solved ' : 'did not solve ') + ( creator ? creator + "'s" : 'this' ) + " Custom Wordle on the Wordlelator! " + (correct.value ? playerGuessCount.value : 'X' ) + '/' + (numberOfGuesses > 0 ? numberOfGuesses : '∞' ) + "\n"
     for ( let i=0; i < guesses.value.length; i++ ){
       let row = []
@@ -443,12 +444,13 @@
         if ( guesses.value[i][x]['state'] == 0 ){
           break
         }
-        row.push(emoji[guesses.value[i][x]['state']])
+        if ( usedHint.value && usedHintBefore.value == i){
+          row.push(hintEmoji[guesses.value[i][x]['state']])
+        } else {
+          row.push(emoji[guesses.value[i][x]['state']])
+        }
       }
       if ( row.length == word.length ){
-        if ( usedHint.value && usedHintBefore.value == i){
-          results += "* "
-        }
         results += row.join('')
         results += "\n"
       }
