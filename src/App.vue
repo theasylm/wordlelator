@@ -78,6 +78,7 @@
   let showHintModal = ref(false)
   let showWinModal = ref(false)
   let showHelpModal = ref(false)
+  let showConfirmModal = ref(false)
   let guesses = ref(Array())
   let currentGuess = ref(0)
   let playerGuessCount = ref(1)
@@ -88,6 +89,7 @@
   let notInDictionary = ref(false)
   let usedHint = ref(false)
   let usedHintBefore = ref(0)
+  let gaveUp = ref(false)
 
   for ( let key in params ) {
     let initialGuess = []
@@ -455,6 +457,12 @@
         results += "\n"
       }
     }
+    if (gaveUp.value) {
+      for ( let x=0; x < wordLength; x++ ) {
+        results += '❌'
+      }
+      results += "\n"
+    }
     results += document.location
     gameResults.value = results
     if (!correct.value){
@@ -563,6 +571,14 @@
     usedHint.value = true
     usedHintBefore.value = currentGuess.value
   }
+
+  let giveUp = function() {
+    showConfirmModal.value = false;
+    finished.value = true
+    gaveUp.value = true
+    genGameResults()
+    showWinModal.value = true
+  }
 </script>
 
 <template>
@@ -577,6 +593,7 @@
         <span class="title">Wordlelator</span>
       </div>
       <div class="col-md-3 help">
+        <XIcon class="give-up-icon" @click="showConfirmModal = true"></XIcon>
         <ChartBarIcon :class="{ inactive: !finished }" @click="showWinModal = (true && finished)"></ChartBarIcon>
         <QuestionMarkCircleIcon @click="showHelpModal = true"></QuestionMarkCircleIcon>
         <LightBulbIcon :class="{ inactive: hint2 == '' }" @click="showHintModal = (true && hint2 != '')"></LightBulbIcon>
@@ -691,6 +708,35 @@
         <div class="modal__content hint">
           <div class="hint-div">
             <div class="hint-span">{{hint2}}</div>
+          </div>
+        </div>
+      </vue-final-modal>
+      <vue-final-modal
+        name="hintModal"
+        classes="modal-container"
+        :click-to-close="false"
+        :esc-to-close="true"
+        v-model="showConfirmModal"
+        content-class="modal-content"
+        :max-width="500"
+      >
+        <div class="close-modal-div">
+          <XIcon @click="showConfirmModal = false"></XIcon>
+        </div>
+        <div class="modal__content confirm">
+          <div class="hint-div">
+            <div class="warning">Are you sure you wish to give up?</div>
+          </div>
+        </div>
+        <div class="modal__action">
+          <div class="mb-3 row">
+            <div class="col-sm-4">
+              <button @click="showConfirmModal = false" class="btn btn-primary">Keep Thinking</button>
+            </div>
+            <div class="col-sm-4">
+              <button @click="giveUp" class="btn btn-danger">Give Up</button><br/>
+              <span id="copiedMessage">Copied!</span>
+            </div>
           </div>
         </div>
       </vue-final-modal>
@@ -940,6 +986,12 @@
   }
   #win-msg {
     font-size:  2.25rem;
+  }
+  .give-up-icon {
+    color:  #842029;
+  }
+  .warning {
+    font-size: 2rem;
   }
 </style>
 <style scoped>
