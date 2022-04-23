@@ -5,7 +5,7 @@
   import Keyboard from './components/Keyboard.vue'
   import CryptoJS from 'crypto-js'
   import JSURL from 'jsurl'
-  import { PencilIcon, QuestionMarkCircleIcon, LightBulbIcon, XIcon, ChartBarIcon } from '@heroicons/vue/outline'
+  import { PencilIcon, QuestionMarkCircleIcon, LightBulbIcon, XIcon, ChartBarIcon, RefreshIcon } from '@heroicons/vue/outline'
   import { allWords } from './assets/js/allWords.js'
   const encrypt = (text, useSalt) => {
     if ( useSalt ){
@@ -579,6 +579,18 @@
     genGameResults()
     showWinModal.value = true
   }
+
+  let clearForm = function() {
+    newWord.value = ''
+    newNumberOfGuesses.value = 6
+    newCreator.value = ''
+    newHint1.value = ''
+    newHint2.value = ''
+    newMessage.value = ''
+    newRevealStartingLetter.value = false
+    newUrl.value = ''
+    newStartingWords.value = Array()
+  }
 </script>
 
 <template>
@@ -619,8 +631,13 @@
         content-class="modal-content"
         :max-width="500"
       >
-        <div class="close-modal-div">
-          <XIcon @click="showModal = false"></XIcon>
+        <div class="formIcons">
+          <div class="reset-modal">
+            <RefreshIcon @click="clearForm"></RefreshIcon>
+          </div>
+          <div class="close-modal-div">
+           <XIcon @click="showModal = false"></XIcon>
+         </div>
         </div>
         <span class="modal__title">New Custom Wordle</span>
         <div class="modal__content">
@@ -913,13 +930,23 @@
   .share-button {
     margin-top: 2rem;
   }
-  .close-modal-div {
-    width: 36px;
+  .close-modal-div, .reset-modal {
     position: absolute;
-    right: .5rem;
-    margin-top: -.5rem;
     cursor: pointer;
   }
+
+  .close-modal-div {
+    margin-top: -.5rem;
+    width: 38px;
+    right: .5rem;
+  }
+
+  .reset-modal {
+    margin-top: -.45rem;
+    width: 32px;
+    right:  42px;
+  }
+
   .left-align {
     text-align: left;
   }
