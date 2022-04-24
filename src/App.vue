@@ -590,6 +590,7 @@
     newRevealStartingLetter.value = false
     newUrl.value = ''
     newStartingWords.value = Array()
+    document.getElementById('word').focus()
   }
 </script>
 
