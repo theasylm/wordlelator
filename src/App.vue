@@ -1056,11 +1056,10 @@
     min-height: 10rem;
   }
   .modal__content {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    scrollbar-color: white;
   }
   .modal__content::-webkit-scrollbar {
-    display: none;
+    scrollbar-color: white;
   }
   ::v-deep .help-modal .modal-content {
     width:  650px;
@@ -1098,9 +1097,11 @@
     float: right;
     width: 24px;
   }
-  @media (max-width: 786px){
+  @media (max-width: 584px){
     .newModal .btn {
       margin: .5rem 0;
+      height: 4rem;
     }
+
   }
 </style>
