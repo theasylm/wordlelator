@@ -502,6 +502,17 @@
     }, 2000)
   }
 
+  const copyUrl = function() {
+    generateUrl()
+    navigator.clipboard.writeText(newUrl.value)
+    let span = document.getElementById('copiedJustMessage')
+    let classes = span.className
+    span.className += 'shown'
+    setTimeout(() => {
+      span.className = classes
+    }, 2000)
+  }
+
   const copyResults = function() {
     navigator.clipboard.writeText(gameResults.value)
     let span = document.getElementById('copiedResultsMessage')
@@ -617,6 +628,7 @@
       <h3 v-if="hint1 != ''">{{hint1}}</h3>
       <div>
         <span class="creator" v-if="creator != ''">Creator: {{creator}}</span>
+        <span class="guess-counter" v-if="wordLength > 0">L: {{wordLength}}</span>
         <span class="guess-counter" v-if="wordLength > 0">Guess: {{playerGuessCount}}/{{numberOfGuesses > 0 ? numberOfGuesses : '∞'}}</span>
       </div>
     </div>
@@ -707,6 +719,10 @@
             <div class="col-sm-4">
               <button @click="copy" class="btn btn-primary">Share URL</button><br/>
               <span id="copiedMessage">Copied!</span>
+            </div>
+            <div class="col-sm-4">
+              <button @click="copyUrl" class="btn btn-primary">Just URL</button><br/>
+              <span id="copiedJustMessage">Copied!</span>
             </div>
           </div>
         </div>
@@ -919,11 +935,11 @@
   #url {
     width:  100%;
   }
-  #copiedMessage, #copiedResultsMessage {
+  #copiedMessage, #copiedResultsMessage, #copiedJustMessage {
     visibility: hidden;
 
   }
-  #copiedMessage.shown, #copiedResultsMessage.shown {
+  #copiedMessage.shown, #copiedResultsMessage.shown, #copiedJustMessage.shown {
     visibility: visible;
     opacity: 0;
     animation: fade 2s linear forwards;
