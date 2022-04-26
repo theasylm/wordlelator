@@ -713,14 +713,14 @@
         </div>
         <div class="modal__action">
           <div class="mb-3 row">
-            <div class="col-sm-4">
+            <div class="col-4">
               <button @click="gotoUrl" class="btn btn-primary">Go to Puzzle</button>
             </div>
-            <div class="col-sm-4">
+            <div class="col-4">
               <button @click="copy" class="btn btn-primary">Share URL</button><br/>
               <span id="copiedMessage">Copied!</span>
             </div>
-            <div class="col-sm-4">
+            <div class="col-4">
               <button @click="copyUrl" class="btn btn-primary">Just URL</button><br/>
               <span id="copiedJustMessage">Copied!</span>
             </div>
