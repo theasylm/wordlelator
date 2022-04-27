@@ -717,11 +717,11 @@
               <button @click="gotoUrl" class="btn btn-primary">Go to Puzzle</button>
             </div>
             <div class="col-4">
-              <button @click="copy" class="btn btn-primary">Share URL</button><br/>
+              <button @click="copy" class="btn btn-primary">Share Link</button><br/>
               <span id="copiedMessage">Copied!</span>
             </div>
             <div class="col-4">
-              <button @click="copyUrl" class="btn btn-primary">Just URL</button><br/>
+              <button @click="copyUrl" class="btn btn-primary">Copy Link</button><br/>
               <span id="copiedJustMessage">Copied!</span>
             </div>
           </div>
