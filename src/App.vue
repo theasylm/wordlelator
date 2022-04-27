@@ -1024,7 +1024,7 @@
     font-size:  2.5rem;
   }
   .hint-div {
-    height: 10rem;
+    min-height: 10rem;
     display: flex;
     align-items: center;
     justify-content: center;
