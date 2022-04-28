@@ -504,6 +504,9 @@
   })
 
   const copy = function() {
+    if ( newWordInvalid.value ){
+      return
+    }
     generateUrl()
     const text = "Try my custom Wordle on the Wordlelator!\n" + newUrl.value
     navigator.clipboard.writeText(text)
@@ -516,6 +519,9 @@
   }
 
   const copyUrl = function() {
+    if ( newWordInvalid.value ){
+      return
+    }
     generateUrl()
     navigator.clipboard.writeText(newUrl.value)
     let span = document.getElementById('copiedJustMessage')
@@ -581,6 +587,9 @@
   }
 
   let gotoUrl = function() {
+    if ( newWordInvalid.value ){
+      return
+    }
     generateUrl()
     window.open(newUrl.value, '_blank');
   }
