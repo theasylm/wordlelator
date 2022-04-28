@@ -301,6 +301,10 @@
 
 
   const guessNotInDictionary = computed(() => {
+    if ( guesses.value.length == 0 ){
+      return false
+    }
+
     let playerAnswer = guesses.value[currentGuess.value].map((e) => e['letter']).join('')
     if ( playerAnswer.length != wordLength || playerAnswer.match(/_/) ) {
       return false;
