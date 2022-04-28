@@ -302,7 +302,7 @@
 
   const guessNotInDictionary = computed(() => {
     let playerAnswer = guesses.value[currentGuess.value].map((e) => e['letter']).join('')
-    if ( playerAnswer.length != wordLength ) {
+    if ( playerAnswer.length != wordLength || playerAnswer.match(/_/) ) {
       return false;
     }
     return !allWords[wordLength].includes(playerAnswer.toUpperCase())
