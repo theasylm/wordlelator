@@ -72,7 +72,7 @@
   }
   .not-word {
     color: #842029;
-    text-decoration: line-through;
+    /**text-decoration: line-through;**/
   }
   .tile.wide {
     width: 7.5rem;
