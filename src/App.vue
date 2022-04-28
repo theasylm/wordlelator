@@ -853,7 +853,7 @@
                 <tr>
                   <td class="col-sm-3">Word</td>
                   <td class="col-sm-9">
-                    Set a word of length 2-15 - limited as the dictionary only handles lengths 2-15.<br/>
+                    Set a word of length 2-15. Limited as the dictionary only handles lengths 2-15.<br/>
                     Words are not required to be in the dictionary to be the secret word, allowing for proper nouns and loan words.<br/>
                     Words can ONLY contain the letters A-Z. No digits or other special characters.
                   </td>
