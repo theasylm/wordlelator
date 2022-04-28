@@ -1,5 +1,4 @@
 <script setup>
-  import { ref } from 'vue'
   const Empty = 0
   const Unguessed = 1
   const NotInWord = 2
@@ -18,7 +17,8 @@
     index: Number,
     keyboard: Boolean,
     initialized: Boolean,
-    colored: Boolean
+    colored: Boolean,
+    guessNotInDictionary: Boolean
   })
 
   let clickTile = function(){
@@ -35,7 +35,7 @@
 </script>
 
 <template>
-  <div class="tile" :class="[statusClasses[state],{ wide: letter.length > 1, revealed: state > 1 && !keyboard && !initialized, colored: colored }]" @click="clickTile">
+  <div class="tile" :class="[statusClasses[state],{ wide: letter.length > 1, revealed: state > 1 && !keyboard && !initialized, colored: colored, 'not-word': guessNotInDictionary }]" @click="clickTile">
     <div class="letter">{{letter}}</div>
   </div>
 </template>
@@ -69,6 +69,10 @@
   .in-place.colored {
     /**background-color: #15a858;**/
     background-color: #50834d;
+  }
+  .not-word {
+    color: #842029;
+    text-decoration: line-through;
   }
   .tile.wide {
     width: 7.5rem;

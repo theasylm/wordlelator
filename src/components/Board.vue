@@ -2,13 +2,14 @@
   import { ref } from 'vue'
   import Row from './Row.vue'
   const props = defineProps({
-    guesses: Array
+    guesses: Array,
+    guessNotInDictionary: Boolean
   })
 </script>
 
 <template>
   <div class="board" id="board">
-    <Row v-for="guess in guesses" :letters="guess"></Row>
+    <Row v-for="guess in guesses" :letters="guess"  :guessNotInDictionary="guessNotInDictionary"></Row>
   </div>
 </template>
 

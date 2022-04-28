@@ -299,6 +299,15 @@
     }
   }
 
+
+  const guessNotInDictionary = computed(() => {
+    let playerAnswer = guesses.value[currentGuess.value].map((e) => e['letter']).join('')
+    if ( playerAnswer.length != wordLength ) {
+      return false;
+    }
+    return !allWords[wordLength].includes(playerAnswer.toUpperCase())
+  })
+
   const fillTile = function(key){
     for ( let i=0; i < guesses.value[currentGuess.value].length; i++ ){
       let tile = guesses.value[currentGuess.value][i]
@@ -632,7 +641,7 @@
         <span class="guess-counter" v-if="wordLength > 0">Guess: {{playerGuessCount}}/{{numberOfGuesses > 0 ? numberOfGuesses : '∞'}}</span>
       </div>
     </div>
-    <Board :guesses="guesses"></Board>
+    <Board :guesses="guesses" :guessNotInDictionary="guessNotInDictionary"></Board>
     <Keyboard :rows="keyboardRows"></Keyboard>
     <div>
       <vue-final-modal
