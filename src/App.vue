@@ -694,7 +694,7 @@
           </div>
           <div class="mb-3 row">
             <label for="startingLetter" class="col-sm-4 col-form-label">Reveal Starting Letter</label>
-            <div class="col-sm-8">
+            <div class="col-sm-8 slider">
               <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" id="startingLetter" v-model="newRevealStartingLetter">
               </div>
@@ -1065,6 +1065,10 @@
   .warning {
     font-size: 2rem;
 
+  }
+  .slider {
+    display: flex;
+    align-items: center;
   }
 </style>
 <style scoped>
