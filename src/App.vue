@@ -299,6 +299,9 @@
     }
   }
 
+  const formInvalid = computed(() => {
+    return ( newWordInvalid.value || newNumberOfGuessesInvalid.value || newStartingWordsInvalid.value.includes(true) )
+  })
 
   const guessNotInDictionary = computed(() => {
     if ( guesses.value.length == 0 ){
@@ -736,14 +739,14 @@
         <div class="modal__action">
           <div class="mb-3 row">
             <div class="col-4">
-              <button @click="gotoUrl" class="btn btn-primary">Go to Puzzle</button>
+              <button @click="gotoUrl" class="btn btn-primary" :disabled="formInvalid">Go to Puzzle</button>
             </div>
             <div class="col-4">
-              <button @click="copy" class="btn btn-primary">Share Link</button><br/>
+              <button @click="copy" class="btn btn-primary" :disabled="formInvalid">Share Link</button><br/>
               <span id="copiedMessage">Copied!</span>
             </div>
             <div class="col-4">
-              <button @click="copyUrl" class="btn btn-primary">Copy Link</button><br/>
+              <button @click="copyUrl" class="btn btn-primary" :disabled="formInvalid">Copy Link</button><br/>
               <span id="copiedJustMessage">Copied!</span>
             </div>
           </div>
