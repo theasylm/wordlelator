@@ -693,7 +693,7 @@
             </div>
           </div>
           <div class="mb-3 row">
-            <label for="startingLetter" class="col-sm-4 col-form-label">Reveal starting letter</label>
+            <label for="startingLetter" class="col-sm-4 col-form-label">Reveal Starting Letter</label>
             <div class="col-sm-8">
               <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" id="startingLetter" v-model="newRevealStartingLetter">
