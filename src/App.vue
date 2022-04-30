@@ -280,7 +280,9 @@
 
   const onKeyup = (e) => onKey(e.key)
   const tileClick = function(e) {
-    console.log(e.detail)
+    if ( finished.value ){
+      return
+    }
     currentPosition.value = e.detail
   }
   window.addEventListener('keyup', onKeyup)
@@ -316,7 +318,7 @@
   })
 
   const guessNotInDictionary = computed(() => {
-    if ( guesses.value.length == 0 || currentGuess.value == guesses.value.length){
+    if ( guesses.value.length == 0 || currentGuess.value == guesses.value.length || currentGuess.value < 0 ){
       return false
     }
 
@@ -425,6 +427,7 @@
     if ( correct.value ) {
       finished.value = true
       currentPosition.value = -1
+      currentGuess.value = -1
       return
     }
 
