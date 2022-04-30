@@ -308,7 +308,7 @@
       completeRow(false)
     } else if ( key == 'ArrowLeft' && currentPosition.value > 0 ) {
       currentPosition.value--
-    } else if ( key == 'ArrowRight' && currentPosition.value < wordLength ) {
+    } else if ( key == 'ArrowRight' && currentPosition.value < wordLength - 1 ) {
       currentPosition.value++
     }
   }
