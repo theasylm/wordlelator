@@ -105,12 +105,12 @@
   const addEmptyRow = function() {
     let initialGuess = []
     if ( revealStartingLetter ) {
-      initialGuess.push({ 'letter': word.charAt(0), 'state': 4, 'initialized': true, 'colored': true })
+      initialGuess.push({ 'letter': word.charAt(0), 'state': 4, 'initialized': true, 'colored': true, 'completed': false })
     } else {
-      initialGuess.push({ 'letter': '', 'state': 0, 'initialized': false, 'colored': false })
+      initialGuess.push({ 'letter': '', 'state': 0, 'initialized': false, 'colored': false, 'completed': false })
     }
     for ( let i=1; i < wordLength; i++ ) {
-      initialGuess.push({ 'letter': '', 'state': 0, 'initialized': false, 'colored': false })
+      initialGuess.push({ 'letter': '', 'state': 0, 'initialized': false, 'colored': false, 'completed': false })
     }
     guesses.value.push(initialGuess)
   }
@@ -309,10 +309,15 @@
     }
 
     let playerAnswer = guesses.value[currentGuess.value].map((e) => e['letter']).join('')
+    if ( word == playerAnswer ){
+      return false
+    }
+
     if ( playerAnswer.length != wordLength || playerAnswer.match(/_/) ) {
       return false;
     }
-    return !allWords[wordLength].includes(playerAnswer.toUpperCase()) && word != playerAnswer
+
+    return !allWords[wordLength].includes(playerAnswer.toUpperCase())
   })
 
   const fillTile = function(key){
@@ -320,6 +325,9 @@
       let tile = guesses.value[currentGuess.value][i]
       if ( tile['letter'] == '' ){
         tile['letter'] = key
+        if ( i == currentGuess.value ){
+          guesses.value[currentGuess.value][i]['completed'] = true
+        }
         break
       }
     }
@@ -657,7 +665,7 @@
         <span class="guess-counter" v-if="wordLength > 0">Guess: {{playerGuessCount}}/{{numberOfGuesses > 0 ? numberOfGuesses : '∞'}}</span>
       </div>
     </div>
-    <Board :guesses="guesses" :guessNotInDictionary="guessNotInDictionary"></Board>
+    <Board :guesses="guesses" :guessNotInDictionary="guessNotInDictionary" :currentGuess="currentGuess"></Board>
     <Keyboard :rows="keyboardRows"></Keyboard>
     <div>
       <vue-final-modal
