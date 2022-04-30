@@ -302,12 +302,15 @@
         key = '_'
       }
       fillTile(key.toLowerCase())
-    } else if (key === 'Backspace') {
+    } else if (key === 'Backspace' || key === 'Delete') {
       clearTile()
     } else if (key === 'Enter') {
       completeRow(false)
     } else if ( key == 'ArrowLeft' && currentPosition.value > 0 ) {
       currentPosition.value--
+      if ( currentPosition.value == wordLength -1 ){
+        currentPosition.value--
+      }
     } else if ( key == 'ArrowRight' && currentPosition.value < wordLength ) {
       currentPosition.value++
     }
@@ -348,7 +351,7 @@
   }
 
   const clearTile = function() {
-    if ( currentPosition.value > 0 ){
+    if ( currentPosition.value > 0 && (currentPosition.value == wordLength || guesses.value[currentGuess.value][currentPosition.value]['letter'] == '' )){
       currentPosition.value--
     }
     let tile = guesses.value[currentGuess.value][currentPosition.value]
