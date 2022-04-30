@@ -312,7 +312,7 @@
     if ( playerAnswer.length != wordLength || playerAnswer.match(/_/) ) {
       return false;
     }
-    return !allWords[wordLength].includes(playerAnswer.toUpperCase())
+    return !allWords[wordLength].includes(playerAnswer.toUpperCase()) && word != playerAnswer
   })
 
   const fillTile = function(key){
