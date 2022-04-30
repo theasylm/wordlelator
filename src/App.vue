@@ -90,6 +90,7 @@
   let usedHint = ref(false)
   let usedHintBefore = ref(0)
   let gaveUp = ref(false)
+  let currentPosition = ref(0)
 
   for ( let key in params ) {
     let initialGuess = []
@@ -278,9 +279,16 @@
   ])
 
   const onKeyup = (e) => onKey(e.key)
+  const tileClick = function(e) {
+    console.log(e.detail)
+    currentPosition.value = e.detail
+  }
   window.addEventListener('keyup', onKeyup)
+  const tileClickEvent = new Event('tile-click');
+  window.addEventListener('tile-click',tileClick)
   onUnmounted(() => {
     window.removeEventListener('keyup', onKeyup)
+    window.removeEventListener('tile-click',tileClick)
   })
 
   const onKey = function(key) {
@@ -296,6 +304,10 @@
       clearTile()
     } else if (key === 'Enter') {
       completeRow(false)
+    } else if ( key == 'ArrowLeft' && currentPosition.value > 0 ) {
+      currentPosition.value--
+    } else if ( key == 'ArrowRight' && currentPosition.value < wordLength ) {
+      currentPosition.value++
     }
   }
 
@@ -321,34 +333,33 @@
   })
 
   const fillTile = function(key){
-    for ( let i=0; i < guesses.value[currentGuess.value].length; i++ ){
-      let tile = guesses.value[currentGuess.value][i]
-      if ( tile['letter'] == '' ){
-        tile['letter'] = key
-        if ( i == currentGuess.value ){
-          guesses.value[currentGuess.value][i]['completed'] = true
-        }
-        break
-      }
+    let tile = {}
+    if ( currentPosition.value == wordLength ){
+      tile = guesses.value[currentGuess.value][currentPosition.value - 1]
+    } else {
+      tile = guesses.value[currentGuess.value][currentPosition.value]
+    }
+    tile['letter'] = key
+    if ( currentPosition.value < wordLength  ){
+      currentPosition.value++
     }
   }
 
   const clearTile = function() {
-    for ( let i=guesses.value[currentGuess.value].length - 1; i > -1 ; i-- ){
-      let tile = guesses.value[currentGuess.value][i]
-      if ( tile['letter'] != '' ){
-        tile['letter'] = ''
-        break
-      }
+    if ( currentPosition.value > 0 ){
+      currentPosition.value--
     }
+    let tile = guesses.value[currentGuess.value][currentPosition.value]
+    tile['letter'] = ''
   }
 
   const completeRow = function(skipAnimation) {
     let skip = skipAnimation ? 0 : 1
     let guess = guesses.value[currentGuess.value]
-    let i = guess.length - 1
-    if ( guess[i]['letter'] === '' ) {
-      return
+    for ( let i = 0; i < guess.length; i++){
+      if ( guess[i]['letter'] === '' ) {
+        return
+      }
     }
 
     let answerLetters = word.split('')
@@ -413,10 +424,12 @@
 
     if ( correct.value ) {
       finished.value = true
+      currentPosition.value = -1
       return
     }
 
     currentGuess.value++
+    currentPosition.value = 0
     if (!skipAnimation ){
       if (playerGuessCount.value < numberOfGuesses || numberOfGuesses == 0 ){
         playerGuessCount.value++
@@ -665,7 +678,7 @@
         <span class="guess-counter" v-if="wordLength > 0">Guess: {{playerGuessCount}}/{{numberOfGuesses > 0 ? numberOfGuesses : '∞'}}</span>
       </div>
     </div>
-    <Board :guesses="guesses" :guessNotInDictionary="guessNotInDictionary" :currentGuess="currentGuess"></Board>
+    <Board :guesses="guesses" :guessNotInDictionary="guessNotInDictionary" :currentGuess="currentGuess" :currentPosition="currentPosition" :wordLength="wordLength"></Board>
     <Keyboard :rows="keyboardRows"></Keyboard>
     <div>
       <vue-final-modal

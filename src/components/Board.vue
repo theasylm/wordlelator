@@ -4,13 +4,15 @@
   const props = defineProps({
     guesses: Array,
     currentGuess: Number,
-    guessNotInDictionary: Boolean
+    guessNotInDictionary: Boolean,
+    currentPosition: Number,
+    wordLength: Number
   })
 </script>
 
 <template>
   <div class="board" id="board">
-    <Row v-for="guess,i in guesses" :letters="guess"  :completed="guess['completed']" :guess="i" :currentGuess="currentGuess" :guessNotInDictionary="guessNotInDictionary"></Row>
+    <Row v-for="guess,i in guesses" :letters="guess"  :completed="guess['completed']" :guess="i" :currentGuess="currentGuess" :guessNotInDictionary="guessNotInDictionary" :currentPosition="currentPosition" :wordLength="wordLength"></Row>
   </div>
 </template>
 

@@ -1,4 +1,5 @@
 <script setup>
+  import { computed } from 'vue'
   const Empty = 0
   const Unguessed = 1
   const NotInWord = 2
@@ -19,6 +20,18 @@
     initialized: Boolean,
     colored: Boolean,
     guessNotInDictionary: Boolean,
+    currentPosition: Number,
+    currentGuess: Number,
+    guessNumber: Number,
+    wordLength: Number
+  })
+
+  let isCurrentTile = computed(() => {
+    let effectivePosition = props.currentPosition
+    if ( effectivePosition == props.wordLength ){
+      effectivePosition--
+    }
+    return props.guessNumber == props.currentGuess && effectivePosition == props.index
   })
 
   let clickTile = function(){
@@ -30,12 +43,14 @@
         letter = 'Backspace'
       }
       window.dispatchEvent(new KeyboardEvent('keyup', {'key': letter}))
+    } else if ( props.guessNumber == props.currentGuess ) {
+      window.dispatchEvent(new CustomEvent('tile-click', { detail: props.index }))
     }
   }
 </script>
 
 <template>
-  <div class="tile" :class="[statusClasses[state],{ wide: letter.length > 1, revealed: state > 1 && !keyboard && !initialized, colored: colored}]" @click="clickTile">
+  <div class="tile" :class="[statusClasses[state],{ wide: letter.length > 1, revealed: state > 1 && !keyboard && !initialized, colored: colored, 'current-tile': isCurrentTile }]" @click="clickTile">
     <div class="letter">{{letter}}</div>
   </div>
 </template>
@@ -55,6 +70,9 @@
     font-weight: 600;
     transition: transform 1.4s;
 
+  }
+  .current-tile {
+    border-width: 5px;
   }
   .unguessed.colored {
     background-color: #818384;
@@ -79,5 +97,8 @@
   .tile.revealed .letter {
     transform: rotateX(180deg);
     transition: transform 1.4s;
+  }
+  .current .tile {
+    cursor: pointer;
   }
 </style>
