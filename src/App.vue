@@ -304,7 +304,7 @@
   })
 
   const guessNotInDictionary = computed(() => {
-    if ( guesses.value.length == 0 ){
+    if ( guesses.value.length == 0 || currentGuess.value == guesses.value.length){
       return false
     }
 
