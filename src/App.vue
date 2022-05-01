@@ -665,15 +665,15 @@
 <template>
   <div class="container">
     <div class="header row">
-      <div class="col-md-3">
+      <div class="col-md-4">
         <button @click="showFormModal" class="new-button btn btn-primary">
           <PencilIcon></PencilIcon>New Wordle
         </button>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-4">
         <span class="title">Wordlelator</span>
       </div>
-      <div class="col-md-3 help">
+      <div class="col-md-4 help">
         <XIcon class="give-up-icon" @click="showConfirmModal = (true && !finished)"></XIcon>
         <ChartBarIcon :class="{ inactive: !finished }" @click="showWinModal = (true && finished)"></ChartBarIcon>
         <QuestionMarkCircleIcon @click="showHelpModal = true"></QuestionMarkCircleIcon>
@@ -691,6 +691,9 @@
     </div>
     <Board :guesses="guesses" :guessNotInDictionary="guessNotInDictionary" :currentGuess="currentGuess" :currentPosition="currentPosition" :wordLength="wordLength"></Board>
     <Keyboard :rows="keyboardRows"></Keyboard>
+    <div class="footer">
+      Custom Wordle creation tool by theasylm.
+    </div>
     <div>
       <vue-final-modal
         name="newWordle"
@@ -1174,6 +1177,13 @@
   }
   .left .tooltip-icon {
     margin-top: 0.5rem;
+  }
+  .footer {
+    position: absolute;
+    bottom: 0.5rem;
+    font-size: smaller;
+    width: 100%;
+    left: 0;
   }
 </style>
 <style scoped>

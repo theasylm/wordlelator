@@ -18,7 +18,7 @@
 
 <style>
   .board {
-    height: calc(100vh - 20rem);
+    height: calc(100vh - 22rem);
    /**height: 10rem;**/
     overflow: scroll;
     -ms-overflow-style: none;  /* IE and Edge */

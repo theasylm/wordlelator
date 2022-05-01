@@ -14,7 +14,7 @@
 <style>
   .keyboard {
     position: absolute;
-    bottom: .5rem;
+    bottom: 2rem;
     left: 0;
     right: 0;
     margin: auto
