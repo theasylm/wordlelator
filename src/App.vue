@@ -1,6 +1,6 @@
 <script setup>
   import { $vfm, VueFinalModal, ModalsContainer } from 'vue-final-modal'
-  import { ref, onUnmounted, computed } from 'vue'
+  import { ref, onUnmounted, onMounted, computed } from 'vue'
   import Board from './components/Board.vue'
   import Keyboard from './components/Keyboard.vue'
   import CryptoJS from 'crypto-js'
@@ -291,6 +291,14 @@
   onUnmounted(() => {
     window.removeEventListener('keyup', onKeyup)
     window.removeEventListener('tile-click',tileClick)
+  })
+
+  onMounted(() => {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(
+      function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
   })
 
   const onKey = function(key) {
@@ -704,20 +712,35 @@
         <span class="modal__title">New Custom Wordle</span>
         <div class="modal__content">
           <div class="mb-3 row">
-            <label for="word" class="col-sm-4 col-form-label" >Word</label>
+            <div class="col-sm-4 col-form-label">
+              <label for="word">Word</label>
+              <div data-bs-toggle="tooltip" title="Secret word to be guessed.<br/>2-15 Letters. A-Z only.<br/>Does not need to be in dictionary." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
+                <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+              </div>
+            </div>
             <div class="col-sm-8">
               <input type="text" class="form-control" id="word" v-model="newWord" :class="{'has-error': newWordInvalid }"/>
               <span class="new-word-warning-message" :class="{'shown': newWordNotInDictionary }">Warning: word not in dictionary.</span>
             </div>
           </div>
           <div class="mb-3 row">
-            <label for="guesses" class="col-sm-4 col-form-label">Number of Guesses</label>
+            <div class="col-sm-4 col-form-label">
+              <label for="guesses">Number of Guesses</label>
+              <div data-bs-toggle="tooltip" title="Does not count starting words.<br/>Set to 0 for infinite." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
+                <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+              </div>
+            </div>
             <div class="col-sm-8">
               <input type="number" class="form-control" id="guesses" v-model="newNumberOfGuesses"  :class="{'has-error': newNumberOfGuessesInvalid }"/>
             </div>
           </div>
           <div class="mb-3 row">
-            <label for="startingLetter" class="col-sm-4 col-form-label">Reveal Starting Letter</label>
+            <div class="col-sm-4 col-form-label">
+              <label for="startingLetter">Reveal Starting Letter</label>
+              <div data-bs-toggle="tooltip" title="Automatically places starting letter." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
+                <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+              </div>
+            </div>
             <div class="col-sm-8 slider">
               <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" id="startingLetter" v-model="newRevealStartingLetter">
@@ -725,38 +748,65 @@
             </div>
           </div>
           <div class="mb-3 row">
-            <label for="creator" class="col-sm-4 col-form-label">Creator</label>
+            <div class="col-sm-4 col-form-label">
+              <label for="creator">Creator</label>
+              <div data-bs-toggle="tooltip" title="Your name.<br/>Optional." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
+                <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+              </div>
+            </div>
             <div class="col-sm-8">
               <input type="text" class="form-control" id="creator" v-model="newCreator"/>
             </div>
           </div>
           <div class="mb-3 row">
-            <label for="hint1" class="col-sm-4 col-form-label">Title</label>
+            <div class="col-sm-4 col-form-label">
+              <label for="hint1">Title</label>
+              <div data-bs-toggle="tooltip" title="Title to be displayed above puzzle.<br/>Optional." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
+                <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+              </div>
+            </div>
             <div class="col-sm-8">
               <input type="text" class="form-control" id="hint1" v-model="newHint1"/>
             </div>
           </div>
           <div class="mb-3 row">
-            <label for="hint2" class="col-sm-4 col-form-label">Hidden Hint</label>
+            <div class="col-sm-4 col-form-label">
+              <label for="hint2">Hidden Hint</label>
+              <div data-bs-toggle="tooltip" title="Hint initially hidden from player.<br/>Optional." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
+                <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+              </div>
+            </div>
             <div class="col-sm-8">
               <input type="text" class="form-control" id="hint2" v-model="newHint2"/>
             </div>
           </div>
           <div class="mb-3 row">
-            <label for="message" class="col-sm-4 col-form-label">Completion Message</label>
+            <div class="col-sm-4 col-form-label">
+              <label for="message">Completion Message</label>
+              <div data-bs-toggle="tooltip" title="Message to be displayed upon success.<br/>Optional." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
+                <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+              </div>
+            </div>
             <div class="col-sm-8">
               <input type="text" class="form-control" id="message" v-model="newMessage"/>
             </div>
           </div>
           <div class="mb-3 row" v-for="(sw,index) in newStartingWords">
-            <label :for="'s' + index" class="col-sm-4 col-form-label">Starting Word</label>
+            <div class="col-sm-4 col-form-label">
+              <label for="message">Starting Word</label>
+            </div>
             <div class="col-sm-8">
               <input type="text" class="form-control" :id="'s' + index" v-model="newStartingWords[index]" :class="{'has-error': newStartingWordsInvalid[index]}" />
             </div>
           </div>
           <div class="mb-3 row">
-            <div class="col-sm-12">
+            <div class="col-sm-4">
+            </div>
+            <div class="col-sm-8 left">
               <button class="btn btn-primary" @click="addNewStartingWord">Add Starting Word</button>
+              <div data-bs-toggle="tooltip" title="Word to be automatically applied.<br/>No limit.<br/>Optional." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
+                <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+              </div>
             </div>
           </div>
         </div>
@@ -933,7 +983,7 @@
               </table>
             </div>
             <div class="col-sm-12">
-              Once you've filled in all the boxes you're interested in, hit either the 'Go to Puzzle' button (good for testing your puzzle), or the 'Share URL' button, which will copy the puzzle URL with a handy message ready for pasting in chat, email, or wherever.
+              Once you've filled in all the boxes you're interested in, hit either the 'Go to Puzzle' button (good for testing your puzzle); the 'Share Link' button, which will copy the puzzle link with a handy message ready for pasting in chat, email, or wherever; or the 'Copy Link' button, which will copy just the link to the puzzle.
             </div>
           </div>
         </div>
@@ -1094,6 +1144,37 @@
     display: flex;
     align-items: center;
   }
+  .tooltip-icon {
+    margin-left: 0.5rem;
+    margin-top: -.5rem;
+    padding: 0;
+    width: 1.25rem;
+    display: inline-block;
+  }
+  .tooltip-icon svg {
+    margin-top: -.25rem;
+  }
+  .bs-tooltip-end .tooltip-arrow::before, .bs-tooltip-bottom .tooltip-arrow::before , .bs-tooltip-top .tooltip-arrow::before, .bs-tooltip-start .tooltip-arrow::before {
+    border-left-color: transparent;
+    border-top-color:  transparent;
+    border-bottom-color:  transparent;
+    border-right-color: transparent;
+  }
+  .tooltip-inner {
+    background-color: #011637;
+    border: 1px solid white;
+    max-width: 300px;
+  }
+  .tooltip.show {
+    opacity: 1;
+  }
+  .left {
+    justify-content: left;
+    display: flex;
+  }
+  .left .tooltip-icon {
+    margin-top: 0.5rem;
+  }
 </style>
 <style scoped>
   ::v-deep .modal-content {
@@ -1106,7 +1187,7 @@
     border: 1px solid #efefef;
     border-radius: 0.25rem;
     background: #011637;
-    width: 600px;
+    width: 700px;
     min-height: 10rem;
   }
   .modal__content {
@@ -1155,6 +1236,12 @@
     .newModal .btn {
       margin: .5rem 0;
       height: 4rem;
+    }
+    .left .tooltip-icon {
+      margin-top: 1.75rem;
+    }
+    .left button {
+      width: 90%;
     }
 
   }
