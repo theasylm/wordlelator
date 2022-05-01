@@ -804,7 +804,7 @@
             </div>
             <div class="col-sm-8 left">
               <button class="btn btn-primary" @click="addNewStartingWord">Add Starting Word</button>
-              <div data-bs-toggle="tooltip" title="Word to be automatically applied.<br/>No limit.<br/>Optional." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
+              <div data-bs-toggle="tooltip" title="Word to be automatically applied.<br/>No limit.<br/>Does not need to be in dictionary.<br/>Optional." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
                 <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
               </div>
             </div>
