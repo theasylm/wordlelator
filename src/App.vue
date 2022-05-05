@@ -527,7 +527,7 @@
   })
 
   let newNumberOfGuessesInvalid = computed(() => {
-    return newNumberOfGuesses.value < 0
+    return newNumberOfGuesses.value === '' || ( newNumberOfGuesses.value != '' && newNumberOfGuesses.value < 0 )
   })
 
   let newStartingWordsInvalid = computed(() => {
