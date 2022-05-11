@@ -321,6 +321,10 @@
     }
   }
 
+  const hasTitle = computed(() => {
+    return hint1.length != 0
+  })
+
   const formInvalid = computed(() => {
     return ( newWordInvalid.value || newNumberOfGuessesInvalid.value || newStartingWordsInvalid.value.includes(true) )
   })
@@ -629,11 +633,6 @@
     window.open(newUrl.value, '_blank');
   }
 
-  if ( hint1 != '' ){
-    window.setTimeout( () => {
-      document.getElementById('board').style.height ='calc(100vh - 22.5rem)';}, 100)
-  }
-
   let openHintModal = function() {
     showHintModal.value = false
     usedHint.value = true
@@ -689,7 +688,7 @@
         <span class="guess-counter" v-if="wordLength > 0">Guess: {{playerGuessCount}}/{{numberOfGuesses > 0 ? numberOfGuesses : '∞'}}</span>
       </div>
     </div>
-    <Board :guesses="guesses" :guessNotInDictionary="guessNotInDictionary" :currentGuess="currentGuess" :currentPosition="currentPosition" :wordLength="wordLength"></Board>
+    <Board :guesses="guesses" :guessNotInDictionary="guessNotInDictionary" :currentGuess="currentGuess" :currentPosition="currentPosition" :wordLength="wordLength" :hasTitle="hasTitle"></Board>
     <Keyboard :rows="keyboardRows"></Keyboard>
     <div class="footer">
       Custom Wordle creation tool by theasylm.
