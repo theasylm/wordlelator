@@ -531,7 +531,7 @@
   })
 
   let newNumberOfGuessesInvalid = computed(() => {
-    return newNumberOfGuesses.value === '' || ( newNumberOfGuesses.value != '' && newNumberOfGuesses.value < 0 )
+    return newNumberOfGuesses.value === '' || ( newNumberOfGuesses.value != '' && (newNumberOfGuesses.value < 0 || newNumberOfGuesses.value > 42 ) )
   })
 
   let newStartingWordsInvalid = computed(() => {
@@ -728,7 +728,7 @@
           <div class="mb-3 row">
             <div class="col-sm-4 col-form-label">
               <label for="guesses">Number of Guesses</label>
-              <div data-bs-toggle="tooltip" title="Does not count starting words.<br/>Set to 0 for infinite." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
+              <div data-bs-toggle="tooltip" title="Does not count starting words.<br/>Set to 0 for infinite.<br/>Max 42." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
                 <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
               </div>
             </div>
@@ -941,7 +941,8 @@
                   <td class="col-sm-3">Number of Guesses</td>
                   <td class="col-sm-9">
                     This is the number of guesses the player has to guess your word, after any starting words you give them.<br/>
-                    You may set this value to 0 to allow for infinite guesses.
+                    You may set this value to 0 to allow for infinite guesses.<br/>
+                    Maximum number of guesses is 42.
                   </td>
                 </tr>
                 <tr>
