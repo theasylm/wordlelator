@@ -303,6 +303,13 @@
 
   const onKey = function(key) {
     if (showModal.value) {
+      newWord.value = newWord.value.replaceAll(/[^a-zA-Z]/g,'')
+      for ( let i=0; i < newStartingWords.value.length; i++ ){
+        newStartingWords.value[i] = newStartingWords.value[i].replaceAll(/[^a-zA-Z]/g,'')
+      }
+      if ( $('#guesses').val() == '' ){
+        newNumberOfGuesses.value = 0
+      }
       return
     }
     if (/^[a-zA-Z_\-]$/.test(key)) {
@@ -659,6 +666,11 @@
     newStartingWords.value = Array()
     document.getElementById('word').focus()
   }
+
+  const stripWord = function() {
+    console.log( 'got here')
+    $('#word').val($('#word').val().replaceAll(/\s/,''))
+  }
 </script>
 
 <template>
@@ -798,7 +810,7 @@
               <label for="message">Starting Word</label>
             </div>
             <div class="col-sm-8">
-              <input type="text" class="form-control" :id="'s' + index" v-model="newStartingWords[index]" :class="{'has-error': newStartingWordsInvalid[index]}" />
+              <input type="text" class="form-control startingWord" :id="'s' + index" v-model="newStartingWords[index]" :class="{'has-error': newStartingWordsInvalid[index]}"/>
             </div>
           </div>
           <div class="mb-3 row">
