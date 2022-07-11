@@ -712,7 +712,7 @@
               </div>
             </div>
             <div class="col-sm-8">
-              <input type="text" class="form-control" id="word" v-model="newWord" :class="{'has-error': newWordInvalid }"/>
+              <input type="text" class="form-control" id="word" v-model.trim="newWord" :class="{'has-error': newWordInvalid }"/>
               <span class="new-word-warning-message" :class="{'shown': newWordNotInDictionary }">Warning: word not in dictionary.</span>
             </div>
           </div>
