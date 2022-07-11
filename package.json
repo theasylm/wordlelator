@@ -9,17 +9,17 @@
   },
   "dependencies": {
     "@heroicons/vue": "^1.0.6",
-    "@vuetify/vite-plugin": "^1.0.0-alpha.10",
+    "vite-plugin-vuetify": "^1.0.0-alpha.12",
     "crypto-js": "^4.1.1",
-    "floating-vue": "^2.0.0-beta.15",
+    "floating-vue": "^2.0.0-beta.17",
     "jsurl": "^0.1.5",
     "lz-string": "^1.4.4",
     "popper": "^1.0.1",
-    "vue": "^3.2.25",
-    "vue-final-modal": "^3.4.3"
+    "vue": "^3.2.37",
+    "vue-final-modal": "^3.4.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.1",
-    "vite": "^2.9.2"
+    "vite": "^2.9.14"
   }
 }
