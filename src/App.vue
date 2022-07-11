@@ -1,6 +1,5 @@
 <script setup>
-  import { $vfm, VueFinalModal, ModalsContainer } from 'vue-final-modal'
-  import { ref, onUnmounted, onMounted, computed } from 'vue'
+  import { ref, onUnmounted, computed } from 'vue'
   import Board from './components/Board.vue'
   import Keyboard from './components/Keyboard.vue'
   import CryptoJS from 'crypto-js'
@@ -16,11 +15,11 @@
     return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(text))
   }
   const decrypt = (data, useSalt) => {
-    let word = CryptoJS.enc.Base64.parse(data).toString(CryptoJS.enc.Utf8)
+    let encodedWord = CryptoJS.enc.Base64.parse(data).toString(CryptoJS.enc.Utf8)
     if ( useSalt ){
-      return word.slice(word.indexOf('||') + 2)
+      return encodedWord.slice(encodedWord.indexOf('||') + 2)
     } else {
-      return word
+      return encodedWord
     }
   }
   let showFormModal = function() {
@@ -293,14 +292,6 @@
     window.removeEventListener('tile-click',tileClick)
   })
 
-  onMounted(() => {
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(
-      function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
-  })
-
   const onKey = function(key) {
     if (showModal.value) {
       return
@@ -370,8 +361,8 @@
   const completeRow = function(skipAnimation) {
     let skip = skipAnimation ? 0 : 1
     let guess = guesses.value[currentGuess.value]
-    for ( let i = 0; i < guess.length; i++){
-      if ( guess[i]['letter'] === '' ) {
+    for ( let value of guess){
+      if ( value['letter'] === '' ) {
         return
       }
     }
@@ -427,8 +418,8 @@
     }
 
     setTimeout( () => {
-      for ( let i=0; i < keyboardUpdates.length; i++ ) {
-        updateKeyboard(keyboardUpdates[i][0],keyboardUpdates[i][1])
+      for ( let value of keyboardUpdates) {
+        updateKeyboard(value[0],value[1])
       }
       if ( correct.value || finished.value ) {
         genGameResults()
@@ -536,8 +527,8 @@
 
   let newStartingWordsInvalid = computed(() => {
     let results = []
-    for ( let i=0; i < newStartingWords.value.length; i++){
-      results.push( (newStartingWords.value[i].length != newWord.value.length || !newStartingWords.value[i].match(/^[a-zA-Z]+$/)) && newStartingWords.value[i].length != 0 )
+    for ( let value of newStartingWords.value){
+      results.push( (value.length != newWord.value.length || !value.match(/^[a-zA-Z]+$/)) && value.length != 0 )
     }
     return results
   })
@@ -603,9 +594,9 @@
     }
 
     let count = 1
-    for ( let i=0; i < newStartingWords.value.length; i++ ) {
-      if ( newStartingWords.value[i].length > 0 ) {
-        o['s' + count++] = newStartingWords.value[i].toLowerCase()
+    for ( let value of newStartingWords.value) {
+      if ( value.length > 0 ) {
+        o['s' + count++] = value.toLowerCase()
       }
     }
 
@@ -1012,8 +1003,6 @@
     background-color: #011637;
     height: 100%;
     padding-top: 1em;
-  }
-  .header {
   }
   .title {
     font-size: 2em;

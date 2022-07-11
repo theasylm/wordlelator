@@ -1,5 +1,4 @@
 <script setup>
-  import { ref } from 'vue'
   import Row from './Row.vue'
   const props = defineProps({
     guesses: Array,
