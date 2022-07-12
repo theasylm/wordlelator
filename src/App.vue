@@ -840,14 +840,14 @@
         <div class="modal__action">
           <div class="mb-3 row">
             <div class="col-4">
-              <button @click="copy" class="btn btn-primary" :disabled="formInvalid" v-if="advancedShown">Share Link</button><br/>
+              <button @click="copy" class="btn btn-primary" :disabled="formInvalid">Share Link</button><br/>
               <span id="copiedMessage">Copied!</span>
             </div>
             <div class="col-4">
               <button @click="gotoUrl" class="btn btn-primary" :disabled="formInvalid">Open</button>
             </div>
             <div class="col-4">
-              <button @click="copyUrl" class="btn btn-primary" :disabled="formInvalid" v-if="advancedShown">Copy Link</button><br/>
+              <button @click="copyUrl" class="btn btn-primary" :disabled="formInvalid">Copy Link</button><br/>
               <span id="copiedJustMessage">Copied!</span>
             </div>
           </div>
@@ -961,7 +961,7 @@
                 The only field that is required is 'Word'. All other fields are entirely optional.
               </p>
               <p>
-                In Advanced mode, two more buttons become available for easier sharing of your puzzle. 'Share Link' copies the link and a preformatted message asking people to try your puzzle to your clipboard. 'Copy Link' copies just the link to your clipboard.
+                Two more buttons are available for easily sharing your puzzle. 'Share Link' copies the link and a preformatted message asking people to try your puzzle to your clipboard. 'Copy Link' copies just the link to your clipboard.
               </p>
               <p>A detailed explanation of each option follows.</p>
               <table class="table" role="presentation">
