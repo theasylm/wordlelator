@@ -307,7 +307,7 @@
       for ( let i=0; i < newStartingWords.value.length; i++ ){
         newStartingWords.value[i] = newStartingWords.value[i].replaceAll(/[^a-zA-Z]/g,'')
       }
-      if ( numberOfGuesses == '' ){
+      if ( newNumberOfGuesses.value == '' ){
         newNumberOfGuesses.value = 0
       }
       return
