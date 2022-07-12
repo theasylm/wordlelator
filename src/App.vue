@@ -16,11 +16,11 @@
     return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(text))
   }
   const decrypt = (data, useSalt) => {
-    let word = CryptoJS.enc.Base64.parse(data).toString(CryptoJS.enc.Utf8)
+    let encryptedWord = CryptoJS.enc.Base64.parse(data).toString(CryptoJS.enc.Utf8)
     if ( useSalt ){
-      return word.slice(word.indexOf('||') + 2)
+      return encryptedWord.slice(encryptedWord.indexOf('||') + 2)
     } else {
-      return word
+      return encryptedWord
     }
   }
   let showFormModal = function() {
@@ -307,7 +307,7 @@
       for ( let i=0; i < newStartingWords.value.length; i++ ){
         newStartingWords.value[i] = newStartingWords.value[i].replaceAll(/[^a-zA-Z]/g,'')
       }
-      if ( $('#guesses').val() == '' ){
+      if ( newNumberOfGuesses.value == '' ){
         newNumberOfGuesses.value = 0
       }
       return
@@ -666,11 +666,6 @@
     newStartingWords.value = Array()
     document.getElementById('word').focus()
   }
-
-  const stripWord = function() {
-    console.log( 'got here')
-    $('#word').val($('#word').val().replaceAll(/\s/,''))
-  }
 </script>
 
 <template>
@@ -923,11 +918,11 @@
           <div class="mb-3 row">
             <div class="col-sm-12">
               Guess the Wordle in the given number of tries. After each guess, the tiles will be colored to indicate how close to the target word your guess was.
-              <img src="./assets/green_clue.png"/>
+              <img src="./assets/green_clue.png" alt="Green Clue"/>
               Green indicates the N is in the correct spot.
-              <img src="./assets/yellow_clue.png"/>
+              <img src="./assets/yellow_clue.png" alt="Yellow Clue"/>
               Yellow indicates the U is in the word, but in another position.
-              <p><img src="./assets/grey_clue.png"/>
+              <p><img src="./assets/grey_clue.png" alt="Grey Clue"/>
               Grey indicates the P is not in the word.</p>
               <p>Your creator may have left a hint for you. Look to see if the light bulb is "lit up". If it is, the creator has left a hint for you to use when you're ready.</p>
               <p>The given number of tries is set by the creator and can be no limit. Look above the grid to see how many guesses you have. </p>
@@ -940,7 +935,7 @@
             <div class="col-sm-12">
               <p>
               To create your own custom Wordle, hit the 'New Wordle' button. On the form presented, you can enter a number of different options. The only required entries are Word and Number of Guesses.</p>
-              <table class="table">
+              <table class="table" role="presentation">
                 <tr>
                   <td class="col-sm-3">Word</td>
                   <td class="col-sm-9">
@@ -1024,8 +1019,6 @@
     background-color: #011637;
     height: 100%;
     padding-top: 1em;
-  }
-  .header {
   }
   .title {
     font-size: 2em;
