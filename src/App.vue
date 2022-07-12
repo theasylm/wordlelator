@@ -5,7 +5,7 @@
   import Keyboard from './components/Keyboard.vue'
   import CryptoJS from 'crypto-js'
   import JSURL from 'jsurl'
-  import { PencilIcon, QuestionMarkCircleIcon, LightBulbIcon, XIcon, ChartBarIcon, RefreshIcon } from '@heroicons/vue/outline'
+  import { PencilIcon, QuestionMarkCircleIcon, LightBulbIcon, XIcon, ChartBarIcon, RefreshIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/vue/outline'
   import { allWords } from './assets/js/allWords.js'
   const encrypt = (text, useSalt) => {
     if ( useSalt ){
@@ -91,6 +91,10 @@
   let usedHintBefore = ref(0)
   let gaveUp = ref(false)
   let currentPosition = ref(0)
+  let advancedShown = ref(false)
+  if ( window.localStorage.getItem('advancedShown') == 'true' ){
+    advancedShown.value = true
+  }
 
   for ( let key in params ) {
     let initialGuess = []
@@ -666,6 +670,10 @@
     newStartingWords.value = Array()
     document.getElementById('word').focus()
   }
+  const toggleAdvancedShown = function() {
+    advancedShown.value = !advancedShown.value
+    window.localStorage.setItem('advancedShown',advancedShown.value)
+  }
 </script>
 
 <template>
@@ -733,88 +741,98 @@
             </div>
           </div>
           <div class="mb-3 row">
-            <div class="col-sm-4 col-form-label">
-              <label for="guesses">Number of Guesses</label>
-              <div data-bs-toggle="tooltip" title="Does not count starting words.<br/>Set to 0 for infinite.<br/>Max 42." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
-                <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
-              </div>
-            </div>
-            <div class="col-sm-8">
-              <input type="number" class="form-control" id="guesses" v-model="newNumberOfGuesses"  :class="{'has-error': newNumberOfGuessesInvalid }"/>
+            <div class="col-sm-12 advanced-controls col-form-label">
+              Advanced
+              <ChevronDownIcon v-if="!advancedShown" @click="toggleAdvancedShown"></ChevronDownIcon>
+              <ChevronUpIcon v-if="advancedShown" @click="toggleAdvancedShown"></ChevronUpIcon>
             </div>
           </div>
-          <div class="mb-3 row">
-            <div class="col-sm-4 col-form-label">
-              <label for="startingLetter">Reveal Starting Letter</label>
-              <div data-bs-toggle="tooltip" title="Automatically places starting letter." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
-                <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+          <div class="advanced" :class="{'shown': advancedShown }">
+            <div class="mb-3 row">
+              <div class="col-sm-4 col-form-label">
+                <label for="guesses">Number of Guesses</label>
+                <div data-bs-toggle="tooltip" title="Does not count starting words.<br/>Set to 0 for infinite.<br/>Max 42." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
+                  <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+                </div>
+              </div>
+              <div class="col-sm-8">
+                <input type="number" class="form-control" id="guesses" v-model="newNumberOfGuesses"  :class="{'has-error': newNumberOfGuessesInvalid }"/>
               </div>
             </div>
-            <div class="col-sm-8 slider">
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="startingLetter" v-model="newRevealStartingLetter">
+            <div class="mb-3 row">
+              <div class="col-sm-4 col-form-label">
+                <label for="startingLetter">Reveal Starting Letter</label>
+                <div data-bs-toggle="tooltip" title="Automatically places starting letter." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
+                  <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+                </div>
+              </div>
+              <div class="col-sm-8 slider">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="startingLetter" v-model="newRevealStartingLetter">
+                </div>
               </div>
             </div>
-          </div>
-          <div class="mb-3 row">
-            <div class="col-sm-4 col-form-label">
-              <label for="creator">Creator</label>
-              <div data-bs-toggle="tooltip" title="Your name.<br/>Optional." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
-                <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+            <div class="mb-3 row">
+              <div class="col-sm-4 col-form-label">
+                <label for="creator">Creator</label>
+                <div data-bs-toggle="tooltip" title="Your name.<br/>Optional." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
+                  <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+                </div>
+              </div>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="creator" v-model="newCreator" placeholder="(Optional)"/>
               </div>
             </div>
-            <div class="col-sm-8">
-              <input type="text" class="form-control" id="creator" v-model="newCreator"/>
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <div class="col-sm-4 col-form-label">
-              <label for="hint1">Title</label>
-              <div data-bs-toggle="tooltip" title="Title to be displayed above puzzle.<br/>Optional." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
-                <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+            <div class="mb-3 row">
+              <div class="col-sm-4 col-form-label">
+                <label for="hint1">Title</label>
+                <div data-bs-toggle="tooltip" title="Title to be displayed above puzzle.<br/>Optional." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
+                  <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+                </div>
+              </div>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="hint1" v-model="newHint1" placeholder="(Optional)"/>
               </div>
             </div>
-            <div class="col-sm-8">
-              <input type="text" class="form-control" id="hint1" v-model="newHint1"/>
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <div class="col-sm-4 col-form-label">
-              <label for="hint2">Hidden Hint</label>
-              <div data-bs-toggle="tooltip" title="Hint initially hidden from player.<br/>Optional." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
-                <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+            <div class="mb-3 row">
+              <div class="col-sm-4 col-form-label">
+                <label for="hint2">Hidden Hint</label>
+                <div data-bs-toggle="tooltip" title="Hint initially hidden from player.<br/>Optional." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
+                  <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+                </div>
+              </div>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="hint2" v-model="newHint2" placeholder="(Optional)"/>
               </div>
             </div>
-            <div class="col-sm-8">
-              <input type="text" class="form-control" id="hint2" v-model="newHint2"/>
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <div class="col-sm-4 col-form-label">
-              <label for="message">Completion Message</label>
-              <div data-bs-toggle="tooltip" title="Message to be displayed upon success.<br/>Optional." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
-                <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+            <div class="mb-3 row">
+              <div class="col-sm-4 col-form-label">
+                <label for="message">Completion Message</label>
+                <div data-bs-toggle="tooltip" title="Message to be displayed upon success.<br/>Optional." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
+                  <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+                </div>
+              </div>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="message" v-model="newMessage" placeholder="(Optional)"/>
               </div>
             </div>
-            <div class="col-sm-8">
-              <input type="text" class="form-control" id="message" v-model="newMessage"/>
+            <hr v-if="newStartingWords.length > 0"/>
+            <div class="mb-3 row" v-for="(sw,index) in newStartingWords">
+              <div class="col-sm-4 col-form-label">
+                <label for="message">Starting Word</label>
+              </div>
+              <div class="col-sm-8">
+                <input type="text" class="form-control startingWord" :id="'s' + index" v-model="newStartingWords[index]" :class="{'has-error': newStartingWordsInvalid[index]}" placeholder="(Optional)"/>
+              </div>
             </div>
-          </div>
-          <div class="mb-3 row" v-for="(sw,index) in newStartingWords">
-            <div class="col-sm-4 col-form-label">
-              <label for="message">Starting Word</label>
-            </div>
-            <div class="col-sm-8">
-              <input type="text" class="form-control startingWord" :id="'s' + index" v-model="newStartingWords[index]" :class="{'has-error': newStartingWordsInvalid[index]}"/>
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <div class="col-sm-4">
-            </div>
-            <div class="col-sm-8 left">
-              <button class="btn btn-primary" @click="addNewStartingWord">Add Starting Word</button>
-              <div data-bs-toggle="tooltip" title="Word to be automatically applied.<br/>No limit.<br/>Does not need to be in dictionary.<br/>Optional." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
-                <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+            <div class="mb-3 row">
+              <div class="col-sm-4">
+              </div>
+              <div class="col-sm-8 left">
+                <button class="btn btn-primary" @click="addNewStartingWord">Add Starting Word</button>
+                <div data-bs-toggle="tooltip" title="Word to be automatically applied.<br/>No limit.<br/>Does not need to be in dictionary.<br/>Optional." data-bs-placement="auto" data-bs-trigger="click" data-bs-html="true" class="tooltip-icon" >
+                  <QuestionMarkCircleIcon ></QuestionMarkCircleIcon>
+                </div>
               </div>
             </div>
           </div>
@@ -822,14 +840,14 @@
         <div class="modal__action">
           <div class="mb-3 row">
             <div class="col-4">
-              <button @click="gotoUrl" class="btn btn-primary" :disabled="formInvalid">Go to Puzzle</button>
-            </div>
-            <div class="col-4">
-              <button @click="copy" class="btn btn-primary" :disabled="formInvalid">Share Link</button><br/>
+              <button @click="copy" class="btn btn-primary" :disabled="formInvalid" v-if="advancedShown">Share Link</button><br/>
               <span id="copiedMessage">Copied!</span>
             </div>
             <div class="col-4">
-              <button @click="copyUrl" class="btn btn-primary" :disabled="formInvalid">Copy Link</button><br/>
+              <button @click="gotoUrl" class="btn btn-primary" :disabled="formInvalid">Open</button>
+            </div>
+            <div class="col-4">
+              <button @click="copyUrl" class="btn btn-primary" :disabled="formInvalid" v-if="advancedShown">Copy Link</button><br/>
               <span id="copiedJustMessage">Copied!</span>
             </div>
           </div>
@@ -934,7 +952,18 @@
           <div class="row">
             <div class="col-sm-12">
               <p>
-              To create your own custom Wordle, hit the 'New Wordle' button. On the form presented, you can enter a number of different options. The only required entries are Word and Number of Guesses.</p>
+                To create your own custom Wordle, hit the 'New Wordle' button. You can then enter your word and hit the 'Open' button. This will take your puzzle so you can test it and send it to friends.
+              </p>
+              <p>
+                Additionally, if you are interested, there are a number of options for customization available in the 'Advanced' pane. To access this pane, simply click the arrow next to 'Advanced'.
+              </p>
+              <p>
+                The only field that is required is 'Word'. All other fields are entirely optional.
+              </p>
+              <p>
+                In Advanced mode, two more buttons become available for easier sharing of your puzzle. 'Share Link' copies the link and a preformatted message asking people to try your puzzle to your clipboard. 'Copy Link' copies just the link to your clipboard.
+              </p>
+              <p>A detailed explanation of each option follows.</p>
               <table class="table" role="presentation">
                 <tr>
                   <td class="col-sm-3">Word</td>
@@ -991,9 +1020,6 @@
                   </td>
                 </tr>
               </table>
-            </div>
-            <div class="col-sm-12">
-              Once you've filled in all the boxes you're interested in, hit either the 'Go to Puzzle' button (good for testing your puzzle); the 'Share Link' button, which will copy the puzzle link with a handy message ready for pasting in chat, email, or wherever; or the 'Copy Link' button, which will copy just the link to the puzzle.
             </div>
           </div>
         </div>
@@ -1189,6 +1215,16 @@
     font-size: smaller;
     width: 100%;
     left: 0;
+  }
+  .advanced-controls svg {
+    width: 1.75rem;
+    margin-top: -.25rem;
+  }
+  .advanced {
+    display: none;
+  }
+  .advanced.shown {
+    display: block;
   }
 </style>
 <style scoped>
