@@ -101,7 +101,7 @@
     if ( key.startsWith('s') ) {
       givenWordCount++
       for ( let i=0; i < wordLength; i++ ) {
-        initialGuess.push({ 'letter': params[key].charAt(i), 'state': 0, 'initialized': true, 'colored': true })
+        initialGuess.push({ 'letter': params[key].charAt(i).toLowerCase(), 'state': 0, 'initialized': true, 'colored': true })
       }
       guesses.value.push(initialGuess)
     }
