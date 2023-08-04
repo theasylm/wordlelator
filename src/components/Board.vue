@@ -13,7 +13,7 @@
 
 <template>
   <div class="board" id="board" :class="{'has-title': hasTitle}">
-    <Row v-for="guess,i in guesses" :letters="guess"  :completed="guess['completed']" :guess="i" :currentGuess="currentGuess" :guessNotInDictionary="guessNotInDictionary" :currentPosition="currentPosition" :wordLength="wordLength"></Row>
+    <Row v-for="guess,i in guesses" :letters="guess"  :completed="guess['completed']" :guess="i" :currentGuess="currentGuess"  :currentPosition="currentPosition" :wordLength="wordLength"></Row>
   </div>
 </template>
 

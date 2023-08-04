@@ -3,7 +3,6 @@
   defineProps({
     letters: Array,
     keyboard: Boolean,
-    guessNotInDictionary: Boolean,
     completed: Boolean,
     guess: Number,
     currentGuess: Number,
@@ -14,7 +13,7 @@
 
 <template>
   <div class="row" :class="{'current': guess == currentGuess, 'not-word': guessNotInDictionary && guess == currentGuess }">
-    <Tile v-for="(letter, index) in letters" :letter="letter.letter" :state="letter.state" :keyboard="keyboard" :index="index" :initialized="letter.initialized" :colored="letter.colored"  :guessNotInDictionary="guessNotInDictionary" :completed="completed" :currentPosition="currentPosition" :guessNumber="guess" :currentGuess="currentGuess" :wordLength="wordLength"></Tile>
+    <Tile v-for="(letter, index) in letters" :letter="letter.letter" :state="letter.state" :keyboard="keyboard" :index="index" :initialized="letter.initialized" :colored="letter.colored" :completed="completed" :currentPosition="currentPosition" :guessNumber="guess" :currentGuess="currentGuess" :wordLength="wordLength"></Tile>
   </div>
 </template>
 
