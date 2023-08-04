@@ -13,7 +13,7 @@
     "floating-vue": "^2.0.0-beta.17",
     "jsurl": "^0.1.5",
     "lz-string": "^1.4.4",
-    "vue": "^3.2.37",
+    "vue": "^3.3.4",
     "vue-final-modal": "^3.4.4"
   },
   "devDependencies": {
