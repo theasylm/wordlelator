@@ -340,23 +340,6 @@
     return ( newWordInvalid.value || newNumberOfGuessesInvalid.value || newStartingWordsInvalid.value.includes(true) )
   })
 
-  const guessNotInDictionary = computed(() => {
-    if ( guesses.value.length == 0 || currentGuess.value == guesses.value.length || currentGuess.value < 0 ){
-      return false
-    }
-
-    let playerAnswer = guesses.value[currentGuess.value].map((e) => e['letter']).join('')
-    if ( word == playerAnswer ){
-      return false
-    }
-
-    if ( playerAnswer.length != wordLength || playerAnswer.match(/_/) ) {
-      return false;
-    }
-
-    return !allWords[wordLength].includes(playerAnswer.toUpperCase())
-  })
-
   const fillTile = function(key){
     let tile = {}
     if ( currentPosition.value == wordLength ){
@@ -468,15 +451,8 @@
     }
   }
 
-  let newWordNotInDictionary = computed(() => {
-    if (newWord.value.length < 2 || newWord.value.length > 15) {
-      return false
-    }
-    return ( !allWords[newWord.value.length].includes(newWord.value.toUpperCase()) )
-  })
-
   const showWordMissingMessage = function() {
-    notInDictionary.value = true
+    notInDictionary.value = false
     setTimeout(() => {
       notInDictionary.value = false
     },1500)
@@ -695,7 +671,7 @@
       </div>
     </div>
     <div class="info">
-      <h5 class="warning-message" :class="{'shown': notInDictionary}">Word not in dictionary.</h5>
+      <h5 class="warning-message">Word not in dictionary.</h5>
       <h3 v-if="hint1 != ''">{{hint1}}</h3>
       <div>
         <span class="creator" v-if="creator != ''">Creator: {{creator}}</span>
@@ -703,7 +679,7 @@
         <span class="guess-counter" v-if="wordLength > 0">Guess: {{playerGuessCount}}/{{numberOfGuesses > 0 ? numberOfGuesses : '∞'}}</span>
       </div>
     </div>
-    <Board :guesses="guesses" :guessNotInDictionary="guessNotInDictionary" :currentGuess="currentGuess" :currentPosition="currentPosition" :wordLength="wordLength" :hasTitle="hasTitle"></Board>
+    <Board :guesses="guesses" :currentGuess="currentGuess" :currentPosition="currentPosition" :wordLength="wordLength" :hasTitle="hasTitle"></Board>
     <Keyboard :rows="keyboardRows"></Keyboard>
     <div class="footer">
       Custom Wordle creation tool by theasylm.
@@ -737,7 +713,6 @@
             </div>
             <div class="col-sm-8">
               <input type="text" class="form-control" id="word" v-model="newWord" :class="{'has-error': newWordInvalid }"/>
-              <span class="new-word-warning-message" :class="{'shown': newWordNotInDictionary }">Warning: word not in dictionary.</span>
             </div>
           </div>
           <div class="mb-3 row">
