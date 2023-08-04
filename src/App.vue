@@ -391,7 +391,7 @@
     let playerAnswer = guess.map((e) => e['letter']).join('')
     correct.value = ( playerAnswer === word )
 
-    if ( !correct.value && !allPossibleWords.includes(playerAnswer.toUpperCase()) && !skipAnimation ){
+    if ( !correct.value && !skipAnimation ){
       showWordMissingMessage()
       return
     }
