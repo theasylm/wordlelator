@@ -369,7 +369,7 @@
         return
       }
     }
-
+console.log("got here")
     let answerLetters = word.split('')
     let playerAnswer = guess.map((e) => e['letter']).join('')
     correct.value = ( playerAnswer === word )
