@@ -362,7 +362,8 @@
   }
 
   const completeRow = function(skipAnimation) {
-    console.log("got here")    let skip = skipAnimation ? 0 : 1
+    console.log("got here")   
+     let skip = skipAnimation ? 0 : 1
     let guess = guesses.value[currentGuess.value]
     for ( let i = 0; i < guess.length; i++){
       if ( guess[i]['letter'] === '' ) {
