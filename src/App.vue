@@ -362,14 +362,14 @@
   }
 
   const completeRow = function(skipAnimation) {
-    let skip = skipAnimation ? 0 : 1
+    console.log("got here")    let skip = skipAnimation ? 0 : 1
     let guess = guesses.value[currentGuess.value]
     for ( let i = 0; i < guess.length; i++){
       if ( guess[i]['letter'] === '' ) {
         return
       }
     }
-console.log("got here")
+
     let answerLetters = word.split('')
     let playerAnswer = guess.map((e) => e['letter']).join('')
     correct.value = ( playerAnswer === word )
