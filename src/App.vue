@@ -362,8 +362,7 @@
   }
 
   const completeRow = function(skipAnimation) {
-    console.log("got here")   
-     let skip = skipAnimation ? 0 : 1
+    let skip = skipAnimation ? 0 : 1
     let guess = guesses.value[currentGuess.value]
     for ( let i = 0; i < guess.length; i++){
       if ( guess[i]['letter'] === '' ) {
@@ -375,10 +374,6 @@
     let playerAnswer = guess.map((e) => e['letter']).join('')
     correct.value = ( playerAnswer === word )
 
-    if ( !correct.value && !skipAnimation ){
-      showWordMissingMessage()
-      return
-    }
     let changedLetters = []
     let keyboardUpdates = []
     for ( let i=0; i < guess.length; i++ ) {
